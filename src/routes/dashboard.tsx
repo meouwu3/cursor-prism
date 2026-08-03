@@ -78,7 +78,7 @@ function Dashboard() {
 
 	if (data.status !== "ready" || !rows || !analytics) {
 		return (
-			<div className="relative flex min-h-screen items-center justify-center">
+			<div className="relative flex min-h-dvh items-center justify-center">
 				<div className="kicker animate-pulse">loading spectrum…</div>
 			</div>
 		);
@@ -87,7 +87,7 @@ function Dashboard() {
 	const { summary } = analytics;
 
 	return (
-		<div className="relative min-h-screen">
+		<div className="relative min-h-dvh">
 			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
 				{/* Top bar */}
 				<header className="fade-in rule-t-strong mb-8 flex flex-wrap items-center justify-between gap-3 pt-4">
@@ -96,7 +96,7 @@ function Dashboard() {
 						className="flex items-center gap-2.5 transition-opacity hover:opacity-70"
 					>
 						<Logo size={26} />
-						<span className="display text-[15px] font-semibold tracking-tight">
+						<span className="display text-base font-semibold tracking-tight">
 							Cursor Prism
 						</span>
 					</Link>
@@ -129,7 +129,7 @@ function Dashboard() {
 
 				{error ? (
 					<div
-						className="mb-4 border px-4 py-2.5 text-[13px]"
+						className="mb-4 border px-4 py-2.5 text-sm"
 						style={{
 							borderRadius: "var(--radius)",
 							borderColor: "var(--accent)",
@@ -152,12 +152,12 @@ function Dashboard() {
 						<div className="flex items-baseline justify-between px-5 pt-4">
 							<div>
 								<div className="kicker">token galaxy</div>
-								<h2 className="display mt-0.5 text-[16px] font-semibold">
+								<h2 className="display mt-0.5 text-base font-semibold">
 									Every request is a star
 								</h2>
 							</div>
 							<div
-								className="num hidden text-[11px] sm:block"
+								className="num hidden text-xs sm:block"
 								style={{ color: "var(--ink-3)" }}
 							>
 								{rows.length} particles
@@ -178,7 +178,7 @@ function Dashboard() {
 						<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
 							<div>
 								<div className="kicker">timeline</div>
-								<h2 className="display mt-0.5 text-[16px] font-semibold">
+								<h2 className="display mt-0.5 text-base font-semibold">
 									Daily rhythm
 								</h2>
 							</div>
@@ -194,7 +194,7 @@ function Dashboard() {
 										key={m}
 										type="button"
 										onClick={() => setMode(m)}
-										className="num cursor-pointer border-none px-3.5 py-1 text-[11px] uppercase tracking-[0.1em] transition-colors"
+										className="num cursor-pointer border-none px-3.5 py-1 text-xs transition-colors"
 										style={{
 											borderRadius: "calc(var(--radius) - 1px)",
 											background: mode === m ? "var(--ink)" : "transparent",
@@ -289,14 +289,11 @@ function Dashboard() {
 						<div className="flex items-baseline justify-between px-5 pt-4 pb-3">
 							<div>
 								<div className="kicker">ledger</div>
-								<h2 className="display mt-0.5 text-[16px] font-semibold">
+								<h2 className="display mt-0.5 text-base font-semibold">
 									Request ledger
 								</h2>
 							</div>
-							<span
-								className="num text-[11px]"
-								style={{ color: "var(--ink-3)" }}
-							>
+							<span className="num text-xs" style={{ color: "var(--ink-3)" }}>
 								latest {analytics.recent.length} rows
 							</span>
 						</div>
@@ -305,7 +302,7 @@ function Dashboard() {
 				</section>
 
 				<footer
-					className="rule-t mt-14 pt-5 text-center text-[12px]"
+					className="rule-t mt-14 pt-5 text-center text-xs"
 					style={{ color: "var(--ink-3)" }}
 				>
 					Cursor Prism — data lives only in browser memory. Built with TanStack
@@ -320,7 +317,7 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 	const tokens = useChartTokens();
 	return (
 		<div className="overflow-x-auto">
-			<table className="w-full min-w-[760px] text-left text-[12px]">
+			<table className="w-full min-w-[760px] text-left text-xs">
 				<thead>
 					<tr
 						className="rule-t-strong"
@@ -356,7 +353,7 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 							</td>
 							<td className="px-2 py-2">
 								<span
-									className="border px-1.5 py-0.5 text-[10.5px]"
+									className="border px-1.5 py-0.5 text-xs"
 									style={{
 										borderRadius: "calc(var(--radius) - 1px)",
 										borderColor: "var(--line)",
@@ -367,7 +364,7 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 								</span>
 								{r.maxMode ? (
 									<span
-										className="ml-1 border px-1.5 py-0.5 text-[10.5px]"
+										className="ml-1 border px-1.5 py-0.5 text-xs"
 										style={{
 											borderRadius: "calc(var(--radius) - 1px)",
 											borderColor: "var(--accent)",

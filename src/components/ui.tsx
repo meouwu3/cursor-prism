@@ -71,7 +71,7 @@ export function SectionTitle({
 			<h2 className="display text-xl font-semibold">{title}</h2>
 			{desc ? (
 				<p
-					className="mt-1 text-[13px] leading-relaxed"
+					className="mt-1 text-sm leading-relaxed"
 					style={{ color: "var(--ink-2)" }}
 				>
 					{desc}

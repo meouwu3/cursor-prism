@@ -27,7 +27,7 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 					{HOURS.map((h) => (
 						<span
 							key={h}
-							className="num text-center text-[9.5px]"
+							className="num text-center text-xs"
 							style={{ color: "var(--ink-3)" }}
 						>
 							{h % 3 === 0 ? h : ""}
@@ -44,7 +44,7 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 						style={{ gridTemplateColumns: "38px 1fr" }}
 					>
 						<span
-							className="pr-2 text-right text-[11px]"
+							className="pr-2 text-right text-xs"
 							style={{ color: "var(--ink-2)" }}
 						>
 							{WEEKDAY_LABELS[w]}
@@ -77,7 +77,7 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 
 			{/* Readout bar */}
 			<div
-				className="num mt-3 flex h-5 items-center justify-between text-[11.5px]"
+				className="num mt-3 flex h-5 items-center justify-between text-xs"
 				style={{ color: "var(--ink-3)" }}
 			>
 				{hover ? (

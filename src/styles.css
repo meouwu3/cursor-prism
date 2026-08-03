@@ -23,6 +23,8 @@
 	--radius: 2px;
 	--font-display: Georgia, "Times New Roman", serif;
 	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+	--ease: cubic-bezier(0.32, 0.72, 0, 1);
+	--hero-grad: linear-gradient(90deg, #1b1a16, #6b675c);
 }
 
 [data-theme="blueprint"] {
@@ -39,6 +41,8 @@
 	--radius: 2px;
 	--font-display: "Geist Mono", ui-monospace, monospace;
 	--font-body: "Geist Mono", ui-monospace, monospace;
+	--ease: cubic-bezier(0.32, 0.72, 0, 1);
+	--hero-grad: linear-gradient(90deg, #ffffff, #9b9b9b);
 }
 
 /* ==========================================================================
@@ -66,7 +70,9 @@ body {
 	font-family: var(--font-body);
 	-webkit-font-smoothing: antialiased;
 	overflow-x: hidden;
-	transition: background-color 0.5s ease, color 0.5s ease;
+	transition:
+		background-color 0.5s var(--ease),
+		color 0.5s var(--ease);
 }
 
 ::selection {
@@ -90,9 +96,48 @@ body {
 /* Theme-change color easing on the usual suspects */
 h1, h2, h3, p, span, div, button, a, td, th, li {
 	transition:
-		background-color 0.5s ease,
-		border-color 0.5s ease,
-		color 0.5s ease;
+		background-color 0.5s var(--ease),
+		border-color 0.5s var(--ease),
+		color 0.5s var(--ease);
+}
+
+/* Visible focus is an accessibility requirement, not a style choice */
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+/* Screen-reader-only text */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Skip to content (keyboard users) */
+.skip-link {
+	position: fixed;
+	top: 8px;
+	left: 8px;
+	z-index: 100;
+	transform: translateY(-64px);
+	transition: transform 0.25s var(--ease);
+	background: var(--bg-2);
+	color: var(--ink);
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius);
+	padding: 8px 12px;
+	font-size: 14px;
+	text-decoration: none;
+}
+.skip-link:focus-visible {
+	transform: none;
 }
 
 /* Circular reveal driven by ThemeProvider (--vt-x / --vt-y) */
@@ -101,7 +146,7 @@ h1, h2, h3, p, span, div, button, a, td, th, li {
 	z-index: 1;
 }
 ::view-transition-new(root) {
-	animation: vt-reveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+	animation: vt-reveal 0.65s var(--ease) both;
 	z-index: 2;
 }
 @keyframes vt-reveal {
@@ -145,20 +190,25 @@ body::before {
 }
 
 /* ==========================================================================
-   Semantic classes — one JSX, three looks
+   Semantic classes — one JSX, two looks
    ========================================================================== */
 
+/* Meta label: sentence case, quiet, monospaced */
 .kicker {
 	font-family: var(--font-mono);
-	font-size: 10.5px;
-	text-transform: uppercase;
-	letter-spacing: 0.22em;
+	font-size: 12px;
+	letter-spacing: 0.06em;
 	color: var(--ink-3);
 }
 
 .display {
 	font-family: var(--font-display);
 	color: var(--ink);
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
 }
 
 [data-theme="print"] .display {
@@ -171,14 +221,19 @@ body::before {
 .accent-word {
 	color: var(--accent);
 }
-[data-theme="print"] .accent-word {
-	font-style: italic;
-}
 [data-theme="blueprint"] .accent-word {
 	text-decoration: underline;
 	text-decoration-style: dashed;
 	text-underline-offset: 0.18em;
 	text-decoration-thickness: 1px;
+}
+
+/* Hero headline gradient — the only gradient on the site, text only */
+.hero-grad {
+	background-image: var(--hero-grad);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
 }
 
 .num {
@@ -224,26 +279,29 @@ body::before {
 	border-right: 1px solid var(--line-strong);
 }
 
-/* Buttons */
+/* Buttons: sentence case, semibold, 8px/12px padding */
 .btn {
-	font-family: var(--font-mono);
-	font-size: 11px;
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-	padding: 0.6em 1.2em;
+	font-family: var(--font-body);
+	font-size: 14px;
+	font-weight: 600;
+	padding: 8px 12px;
 	border: 1px solid var(--line);
 	color: var(--ink-2);
 	background: transparent;
 	border-radius: var(--radius);
 	cursor: pointer;
 	transition:
-		background-color 0.2s ease,
-		border-color 0.2s ease,
-		color 0.2s ease;
+		background-color 0.25s var(--ease),
+		border-color 0.25s var(--ease),
+		color 0.25s var(--ease),
+		transform 0.15s var(--ease);
 }
 .btn:hover {
 	color: var(--ink);
 	border-color: var(--line-strong);
+}
+.btn:active {
+	transform: scale(0.98);
 }
 [data-theme="print"] .btn {
 	border-color: var(--ink);
@@ -283,7 +341,7 @@ body::before {
 	align-items: center;
 	gap: 0.5em;
 	font-family: var(--font-mono);
-	font-size: 11px;
+	font-size: 12px;
 	color: var(--ink-2);
 	border: 1px solid var(--line);
 	border-radius: var(--radius);
@@ -384,7 +442,7 @@ body::before {
 	}
 }
 .fade-in {
-	animation: fade-in 0.6s ease both;
+	animation: fade-in 0.6s var(--ease) both;
 	animation-delay: var(--d, 0ms);
 }
 
@@ -398,7 +456,7 @@ body::before {
 }
 .grow-x {
 	transform-origin: left center;
-	animation: grow-x 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation: grow-x 0.7s var(--ease) both;
 	animation-delay: var(--d, 0ms);
 }
 

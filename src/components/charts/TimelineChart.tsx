@@ -253,13 +253,10 @@ export function TimelineChart({
 						top: Math.max(geo.pts[hover][1] - 96, 0),
 					}}
 				>
-					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
+					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
 						{points[hover].key}
 					</div>
-					<div
-						className="num text-[13px] font-semibold"
-						style={{ color: accent }}
-					>
+					<div className="num text-sm font-semibold" style={{ color: accent }}>
 						{fmt(values[hover])}
 						<span
 							className="ml-1.5 font-normal"
@@ -268,7 +265,7 @@ export function TimelineChart({
 							{mode === "tokens" ? "tokens" : "spent"}
 						</span>
 					</div>
-					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
+					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
 						{points[hover].count} requests
 					</div>
 				</div>

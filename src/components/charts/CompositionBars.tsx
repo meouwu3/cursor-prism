@@ -78,7 +78,7 @@ export function CompositionBars({
 				{PARTS.map((p, i) => (
 					<span
 						key={p.key}
-						className="flex items-center gap-1.5 text-[12px]"
+						className="flex items-center gap-1.5 text-xs"
 						style={{ color: "var(--ink-2)" }}
 					>
 						<span
@@ -105,13 +105,10 @@ export function CompositionBars({
 			{/* Overall composition */}
 			<div>
 				<div className="mb-2 flex items-baseline justify-between">
-					<span
-						className="text-[13px] font-medium"
-						style={{ color: "var(--ink)" }}
-					>
+					<span className="text-sm font-medium" style={{ color: "var(--ink)" }}>
 						All requests
 					</span>
-					<span className="num text-[12px]" style={{ color: "var(--ink-3)" }}>
+					<span className="num text-xs" style={{ color: "var(--ink-3)" }}>
 						{formatTokens(totalAll)}
 					</span>
 				</div>
@@ -132,7 +129,7 @@ export function CompositionBars({
 					<div key={s.model}>
 						<div className="mb-1.5 flex items-baseline justify-between gap-3">
 							<span
-								className="flex min-w-0 items-center gap-2 text-[12.5px]"
+								className="flex min-w-0 items-center gap-2 text-sm"
 								style={{ color: "var(--ink)" }}
 							>
 								<span
@@ -145,7 +142,7 @@ export function CompositionBars({
 								<span className="truncate">{s.model}</span>
 							</span>
 							<span
-								className="num shrink-0 text-[11.5px]"
+								className="num shrink-0 text-xs"
 								style={{ color: "var(--ink-3)" }}
 							>
 								cache{" "}

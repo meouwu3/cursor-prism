@@ -254,7 +254,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 				{models.map((m, i) => (
 					<span
 						key={m}
-						className="flex items-center gap-1.5 text-[11px]"
+						className="flex items-center gap-1.5 text-xs"
 						style={{ color: "var(--ink-2)" }}
 					>
 						{m}
@@ -283,11 +283,11 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 						top: Math.max(tip.y - 90, 8),
 					}}
 				>
-					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
+					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
 						{formatDateTime(tip.row.date)}
 					</div>
 					<div
-						className="num text-[13px] font-semibold"
+						className="num text-sm font-semibold"
 						style={{ color: tip.color }}
 					>
 						{formatTokens(tip.row.totalTokens)}
@@ -298,7 +298,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 							tokens
 						</span>
 					</div>
-					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
+					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
 						{tip.row.model} / {formatCost(tip.row.cost)}
 					</div>
 				</div>

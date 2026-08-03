@@ -84,7 +84,7 @@ export function ModelDonut({ stats }: { stats: ModelStat[] }) {
 					</div>
 					{active ? (
 						<div
-							className="mt-0.5 max-w-[110px] truncate text-[11px]"
+							className="mt-0.5 max-w-[110px] truncate text-xs"
 							style={{ color: "var(--ink-2)" }}
 						>
 							{active.model}
@@ -116,19 +116,19 @@ export function ModelDonut({ stats }: { stats: ModelStat[] }) {
 								}}
 							/>
 							<span
-								className="min-w-0 flex-1 truncate text-[13px]"
+								className="min-w-0 flex-1 truncate text-sm"
 								style={{ color: "var(--ink)" }}
 							>
 								{s.model}
 							</span>
 							<span
-								className="num shrink-0 text-[12px]"
+								className="num shrink-0 text-xs"
 								style={{ color: "var(--ink-2)" }}
 							>
 								{formatTokens(s.tokens)}
 							</span>
 							<span
-								className="num w-12 shrink-0 text-right text-[12px] font-medium"
+								className="num w-12 shrink-0 text-right text-xs font-medium"
 								style={{ color: s.color }}
 							>
 								{formatPct(s.share)}

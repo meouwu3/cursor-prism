@@ -21,7 +21,7 @@ export function TopRequests({ rows }: { rows: UsageRow[] }) {
 						key={`${r.date.getTime()}-${r.model}-${r.totalTokens}`}
 						className="group"
 					>
-						<div className="mb-1 flex items-baseline gap-2 text-[12px]">
+						<div className="mb-1 flex items-baseline gap-2 text-xs">
 							<span
 								className="num w-5 shrink-0 text-right"
 								style={{ color: "var(--ink-3)" }}
@@ -65,7 +65,7 @@ export function TopRequests({ rows }: { rows: UsageRow[] }) {
 								/>
 							</div>
 							<span
-								className="w-24 truncate text-right text-[10.5px]"
+								className="w-24 truncate text-right text-xs"
 								style={{ color: "var(--ink-3)" }}
 							>
 								{r.model}

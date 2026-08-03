@@ -43,7 +43,7 @@ export function ThemeSwitcher() {
 							}}
 						/>
 						<span
-							className="num hidden text-[10px] uppercase tracking-[0.14em] sm:block"
+							className="num hidden text-xs sm:block"
 							style={{ color: active ? "var(--ink)" : "var(--ink-3)" }}
 						>
 							{t.label}

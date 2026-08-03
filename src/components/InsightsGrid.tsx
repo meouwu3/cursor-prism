@@ -16,19 +16,16 @@ export function InsightsGrid({ insights }: { insights: Insight[] }) {
 					style={{ "--d": `${i * 70}ms` } as React.CSSProperties}
 				>
 					<div className="mb-2 flex items-baseline gap-2">
-						<span
-							className="num text-[11px]"
-							style={{ color: "var(--accent)" }}
-						>
+						<span className="num text-xs" style={{ color: "var(--accent)" }}>
 							{String(i + 1).padStart(2, "0")}
 						</span>
 						<span className="kicker">{ins.title}</span>
 					</div>
-					<div className="display text-[24px] leading-tight font-semibold">
+					<div className="display text-2xl leading-tight font-semibold">
 						{ins.value}
 					</div>
 					<p
-						className="mt-2 text-[12.5px] leading-relaxed"
+						className="mt-2 text-sm leading-relaxed"
 						style={{ color: "var(--ink-2)" }}
 					>
 						{ins.text}

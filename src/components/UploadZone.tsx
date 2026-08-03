@@ -81,14 +81,14 @@ export function UploadZone({
 				</span>
 
 				<span
-					className={`display font-medium ${compact ? "text-[14px]" : "text-[16px]"}`}
+					className={`display font-medium ${compact ? "text-sm" : "text-base"}`}
 				>
 					{dragging
 						? "Release to refract"
 						: "Drop your CSV, or click to browse"}
 				</span>
 				{!compact && (
-					<span className="mt-2 text-[13px]" style={{ color: "var(--ink-3)" }}>
+					<span className="mt-2 text-sm" style={{ color: "var(--ink-3)" }}>
 						Exported from{" "}
 						<span className="num" style={{ color: "var(--ink-2)" }}>
 							cursor.com/dashboard → Usage → Export CSV
@@ -110,7 +110,7 @@ export function UploadZone({
 
 			{error ? (
 				<div
-					className="mt-3 border px-4 py-2.5 text-[13px]"
+					className="mt-3 border px-4 py-2.5 text-sm"
 					style={{
 						borderRadius: "var(--radius)",
 						borderColor: "var(--accent)",

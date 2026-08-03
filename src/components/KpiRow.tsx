@@ -24,13 +24,13 @@ function Kpi({
 			<div
 				className={`display font-semibold ${
 					value.length > 12
-						? "text-[16px] leading-snug break-words"
-						: "text-[26px] leading-none"
+						? "text-base leading-snug break-words"
+						: "text-2xl leading-none"
 				}`}
 			>
 				{value}
 			</div>
-			<div className="num mt-1.5 text-[11px]" style={{ color: "var(--ink-3)" }}>
+			<div className="num mt-1.5 text-xs" style={{ color: "var(--ink-3)" }}>
 				{sub}
 			</div>
 		</div>
