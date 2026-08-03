@@ -85,7 +85,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<a href="#main" className="skip-link">
+				<a
+					href="#main"
+					className="fixed top-2 left-2 z-[100] -translate-y-16 rounded-xs border border-line-strong bg-bg-2 px-3 py-2 text-sm text-ink no-underline transition-[translate] duration-250 ease-(--ease) focus-visible:translate-y-0"
+				>
 					Skip to content
 				</a>
 				<ThemeProvider>

@@ -37,19 +37,15 @@ function Bar({
 	let left = 0;
 	return (
 		<div
-			className="relative w-full overflow-hidden"
-			style={{
-				height,
-				background: track,
-				borderRadius: "var(--radius)",
-			}}
+			className="relative w-full overflow-hidden rounded-xs"
+			style={{ height, background: track }}
 		>
 			{parts.map((p) => {
 				const width = (p.value / total) * 100;
 				const el = (
 					<div
 						key={p.color}
-						className="grow-x absolute top-0 bottom-0"
+						className="absolute top-0 bottom-0 origin-left animate-grow-x [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 						style={
 							{
 								left: `${left}%`,
@@ -134,9 +130,11 @@ export function ModelSpectrum({
 				</svg>
 				{/* Center readout */}
 				<div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-					<div className="kicker">{active ? "share" : "total tokens"}</div>
+					<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+						{active ? "share" : "total tokens"}
+					</div>
 					<div
-						className="num mt-0.5 text-xl font-semibold"
+						className="font-mono tabular-nums tracking-[-0.01em] mt-0.5 text-xl font-semibold"
 						style={{ color: active ? active.color : "var(--ink)" }}
 					>
 						{active
@@ -144,10 +142,7 @@ export function ModelSpectrum({
 							: formatTokens(stats.reduce((a, s) => a + s.tokens, 0))}
 					</div>
 					{active ? (
-						<div
-							className="mt-0.5 max-w-[110px] truncate text-xs"
-							style={{ color: "var(--ink-2)" }}
-						>
+						<div className="mt-0.5 max-w-[110px] truncate text-xs text-ink-2">
 							{active.model}
 						</div>
 					) : null}
@@ -161,18 +156,14 @@ export function ModelSpectrum({
 					{PARTS.map((p, i) => (
 						<span
 							key={p.key}
-							className="flex items-center gap-1.5 text-xs"
-							style={{ color: "var(--ink-2)" }}
+							className="flex items-center gap-1.5 text-xs text-ink-2"
 						>
 							<span
-								className="h-2 w-2"
-								style={{
-									background: partColors[i],
-									borderRadius: "calc(var(--radius) - 1px)",
-								}}
+								className="h-2 w-2 rounded-[1px]"
+								style={{ background: partColors[i] }}
 							/>
 							{p.label}
-							<span className="num" style={{ color: "var(--ink-3)" }}>
+							<span className="font-mono tabular-nums tracking-[-0.01em] text-ink-3">
 								{formatPct(
 									(p.key === "cacheRead"
 										? overall.cacheRead
@@ -187,12 +178,7 @@ export function ModelSpectrum({
 
 				{/* Overall composition */}
 				<div>
-					<div
-						className="mb-2 text-sm font-medium"
-						style={{ color: "var(--ink)" }}
-					>
-						All requests
-					</div>
+					<div className="mb-2 text-sm font-medium text-ink">All requests</div>
 					<Bar
 						height={24}
 						track={tokens.grid}
@@ -210,44 +196,28 @@ export function ModelSpectrum({
 						// biome-ignore lint/a11y/noStaticElementInteractions: hover only cross-highlights the ring segment; no action
 						<div
 							key={s.model}
-							className="px-2.5 py-1.5 transition-colors"
-							style={{
-								borderRadius: "var(--radius)",
-								background: hover === s.i ? "var(--line)" : "transparent",
-							}}
+							className={`rounded-xs px-2.5 py-1.5 transition-colors ${hover === s.i ? "bg-line" : "bg-transparent"}`}
 							onMouseEnter={() => setHover(s.i)}
 							onMouseLeave={() => setHover(null)}
 						>
 							<div className="mb-1.5 flex items-baseline gap-3">
-								<span
-									className="flex min-w-0 flex-1 items-center gap-2 text-sm"
-									style={{ color: "var(--ink)" }}
-								>
+								<span className="flex min-w-0 flex-1 items-center gap-2 text-sm text-ink">
 									<span
-										className="h-2 w-2 shrink-0"
-										style={{
-											background: s.color,
-											borderRadius: "calc(var(--radius) - 1px)",
-										}}
+										className="h-2 w-2 shrink-0 rounded-[1px]"
+										style={{ background: s.color }}
 									/>
 									<span className="truncate">{s.model}</span>
 								</span>
-								<span
-									className="num shrink-0 text-xs"
-									style={{ color: "var(--ink-2)" }}
-								>
+								<span className="shrink-0 font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-2">
 									{formatTokens(s.tokens)}
 								</span>
 								<span
-									className="num w-12 shrink-0 text-right text-xs font-medium"
+									className="w-12 shrink-0 text-right font-mono text-xs font-medium tabular-nums tracking-[-0.01em]"
 									style={{ color: s.color }}
 								>
 									{formatPct(s.share)}
 								</span>
-								<span
-									className="num w-16 shrink-0 text-right text-xs"
-									style={{ color: "var(--ink-3)" }}
-								>
+								<span className="w-16 shrink-0 text-right font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-3">
 									cache{" "}
 									{formatPct(
 										s.cacheRead / (s.cacheRead + s.input + s.output || 1),

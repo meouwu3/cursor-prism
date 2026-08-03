@@ -38,23 +38,15 @@ export function UploadZone({
 					setDragging(false);
 					handle(e.dataTransfer.files);
 				}}
-				className={`group relative flex w-full cursor-pointer flex-col items-center justify-center border border-dashed text-center transition-colors duration-200 ${
+				className={`group relative flex w-full cursor-pointer flex-col items-center justify-center rounded-xs border border-dashed text-center transition-colors duration-200 ${
 					compact ? "px-6 py-6" : "px-8 py-14"
-				}`}
-				style={{
-					borderRadius: "var(--radius)",
-					borderColor: dragging ? "var(--accent)" : "var(--line-strong)",
-					background: dragging ? "var(--bg-2)" : "transparent",
-				}}
+				} ${dragging ? "border-accent bg-bg-2" : "border-line-strong bg-transparent"}`}
 			>
 				{/* Upload icon: hairline circle + arrow */}
 				<span
-					className={`mb-4 flex items-center justify-center rounded-full border transition-transform duration-200 group-hover:-translate-y-0.5 ${
+					className={`mb-4 flex items-center justify-center rounded-full border transition-[translate] duration-200 group-hover:-translate-y-0.5 ${
 						compact ? "h-11 w-11" : "h-14 w-14"
-					}`}
-					style={{
-						borderColor: dragging ? "var(--accent)" : "var(--line-strong)",
-					}}
+					} ${dragging ? "border-accent" : "border-line-strong"}`}
 				>
 					<svg
 						width={compact ? 18 : 22}
@@ -81,16 +73,16 @@ export function UploadZone({
 				</span>
 
 				<span
-					className={`display font-medium ${compact ? "text-sm" : "text-base"}`}
+					className={`font-display text-balance font-medium tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em] ${compact ? "text-sm" : "text-base"}`}
 				>
 					{dragging
 						? "Release to refract"
 						: "Drop your CSV, or click to browse"}
 				</span>
 				{!compact && (
-					<span className="mt-2 text-sm" style={{ color: "var(--ink-3)" }}>
+					<span className="mt-2 text-sm text-ink-3">
 						Exported from{" "}
-						<span className="num" style={{ color: "var(--ink-2)" }}>
+						<span className="font-mono tabular-nums tracking-[-0.01em] text-ink-2">
 							cursor.com/dashboard → Usage → Export CSV
 						</span>
 					</span>
@@ -109,14 +101,7 @@ export function UploadZone({
 			</button>
 
 			{error ? (
-				<div
-					className="mt-3 border px-4 py-2.5 text-sm"
-					style={{
-						borderRadius: "var(--radius)",
-						borderColor: "var(--accent)",
-						color: "var(--accent)",
-					}}
-				>
+				<div className="mt-3 rounded-xs border border-accent px-4 py-2.5 text-sm text-accent">
 					Parse failed: {error}
 				</div>
 			) : null}

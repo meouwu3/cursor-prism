@@ -160,7 +160,7 @@ export function TimelineChart({
 					<path
 						d={geo.area}
 						fill={`url(#tl-fill-${mode})`}
-						className="fade-in"
+						className="animate-fade-in [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 						style={{ "--d": "300ms" } as React.CSSProperties}
 					/>
 
@@ -247,25 +247,25 @@ export function TimelineChart({
 			{/* Hover detail */}
 			{hover !== null && geo && points[hover] ? (
 				<div
-					className="chart-tip"
+					className="pointer-events-none absolute z-30 rounded-xs border border-line-strong bg-bg-2 px-[11px] py-2 text-xs leading-normal whitespace-nowrap text-ink blueprint:border-dashed"
 					style={{
 						left: Math.min(Math.max(geo.pts[hover][0] - 70, 4), geo.w - 168),
 						top: Math.max(geo.pts[hover][1] - 96, 0),
 					}}
 				>
-					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
+					<div className="font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-3">
 						{points[hover].key}
 					</div>
-					<div className="num text-sm font-semibold" style={{ color: accent }}>
+					<div
+						className="font-mono text-sm font-semibold tabular-nums tracking-[-0.01em]"
+						style={{ color: accent }}
+					>
 						{fmt(values[hover])}
-						<span
-							className="ml-1.5 font-normal"
-							style={{ color: "var(--ink-3)" }}
-						>
+						<span className="ml-1.5 font-normal text-ink-3">
 							{mode === "tokens" ? "tokens" : "spent"}
 						</span>
 					</div>
-					<div className="num text-xs" style={{ color: "var(--ink-3)" }}>
+					<div className="font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-3">
 						{points[hover].count} requests
 					</div>
 				</div>

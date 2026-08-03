@@ -15,13 +15,7 @@ export function ThemeSwitcher() {
 	const mounted = useMounted();
 
 	return (
-		<div
-			className="theme-switch flex h-8 items-center gap-1 border px-1"
-			style={{
-				borderColor: "var(--line)",
-				borderRadius: "var(--radius)",
-			}}
-		>
+		<div className="flex h-8 items-center gap-1 rounded-xs border border-line px-1 blueprint:border-dashed">
 			{THEMES.map((t) => {
 				const active = mounted && t.id === theme;
 				return (
@@ -31,8 +25,7 @@ export function ThemeSwitcher() {
 						title={t.label}
 						disabled={!mounted}
 						onClick={(e) => switchTheme(t.id, e.clientX, e.clientY)}
-						className="flex cursor-pointer items-center gap-1.5 px-1.5 py-1"
-						style={{ borderRadius: "calc(var(--radius) - 1px)" }}
+						className="flex cursor-pointer items-center gap-1.5 rounded-[1px] px-1.5 py-1 transition-[scale] duration-250 ease-(--spring) hover:scale-[1.06]"
 					>
 						<span
 							className="block h-3.5 w-3.5 rounded-full border"
@@ -43,8 +36,7 @@ export function ThemeSwitcher() {
 							}}
 						/>
 						<span
-							className="num hidden text-xs sm:block"
-							style={{ color: active ? "var(--ink)" : "var(--ink-3)" }}
+							className={`hidden font-mono text-xs tabular-nums tracking-[-0.01em] sm:block ${active ? "text-ink" : "text-ink-3"}`}
 						>
 							{t.label}
 						</span>

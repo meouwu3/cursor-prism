@@ -17,12 +17,14 @@ function Kpi({
 }) {
 	return (
 		<div
-			className="kpi rise px-4.5 py-4"
+			className="animate-rise rounded-xs border-line bg-bg-2 px-4.5 py-4 [animation-delay:var(--d,0ms)] motion-reduce:animate-none print:rounded-none print:border-l print:bg-transparent print:first:border-l-0 print:first:pl-0 blueprint:border blueprint:bg-[rgba(234,241,255,0.04)]"
 			style={{ "--d": `${delay}ms` } as React.CSSProperties}
 		>
-			<div className="kicker mb-2">{label}</div>
+			<div className="mb-2 font-mono text-xs tracking-[0.06em] text-ink-3">
+				{label}
+			</div>
 			<div
-				className={`display font-semibold ${
+				className={`font-display text-balance font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em] ${
 					value.length > 12
 						? "text-base leading-snug break-words"
 						: "text-2xl leading-none"
@@ -30,7 +32,7 @@ function Kpi({
 			>
 				{value}
 			</div>
-			<div className="num mt-1.5 text-xs" style={{ color: "var(--ink-3)" }}>
+			<div className="mt-1.5 font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-3">
 				{sub}
 			</div>
 		</div>
