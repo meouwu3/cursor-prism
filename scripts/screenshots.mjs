@@ -3,7 +3,7 @@
  *
  * Drives a locally installed Chrome (headless, throwaway profile — your
  * real browser data is never touched) through the main user flows, once
- * per theme (print / dark / blueprint):
+ * per theme (print / blueprint):
  *
  *   1. landing page
  *   2. dashboard with a synthesized fixture CSV (scripts/fixture-csv.mjs)
@@ -28,7 +28,7 @@ import { generateFixtureCsv } from "./fixture-csv.mjs";
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const REAL_CSV = process.env.REAL_CSV ?? `${homedir()}/downloads/2026-07-30.csv`;
 const OUT = new URL("../docs/screenshots/", import.meta.url).pathname;
-const THEMES = ["print", "dark", "blueprint"];
+const THEMES = ["print", "blueprint"];
 const FIXTURE = `${tmpdir()}/cursor-prism-fixture.csv`;
 
 writeFileSync(FIXTURE, generateFixtureCsv());

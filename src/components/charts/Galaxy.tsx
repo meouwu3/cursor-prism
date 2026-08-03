@@ -4,7 +4,7 @@
  * z: model dimension. Rendered with Canvas 2D and pre-baked sprites;
  * drag to rotate, hover to inspect. Zero dependencies.
  * Sprite style follows the theme: crisp dots on paper, soft glow
- * on dark and blueprint.
+ * on blueprint.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";

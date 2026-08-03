@@ -1,7 +1,6 @@
 /**
- * Theme system: three full design languages sharing one semantic token
- * set — Print (editorial paper), Dark (precision tool), Blueprint
- * (technical drawing).
+ * Theme system: two full design languages sharing one semantic token
+ * set — Print (editorial paper) and Blueprint (technical drawing).
  *
  * - Colors/textures live as CSS variables keyed off <html data-theme>.
  * - Chart/canvas colors (which need concrete values, not CSS vars)
@@ -21,7 +20,7 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 
-export type ThemeId = "print" | "dark" | "blueprint";
+export type ThemeId = "print" | "blueprint";
 
 export const THEME_STORAGE_KEY = "cursor-prism:theme";
 
@@ -35,11 +34,6 @@ export const THEMES: {
 		id: "print",
 		label: "Print",
 		swatch: { bg: "#F6F4EE", line: "#DDD9CB", accent: "#D9481C" },
-	},
-	{
-		id: "dark",
-		label: "Dark",
-		swatch: { bg: "#0B0B0C", line: "#2A2A2E", accent: "#6C73F0" },
 	},
 	{
 		id: "blueprint",
@@ -93,27 +87,6 @@ export const CHART_TOKENS: Record<ThemeId, ChartTokens> = {
 		accent: "#D9481C",
 		heat: (a) => `rgba(217,72,28,${0.05 + a * 0.85})`,
 	},
-	dark: {
-		bg: "#0B0B0C",
-		palette: [
-			"#F2F2F3",
-			"#6C73F0",
-			"#45B8AC",
-			"#E3B341",
-			"#F2784B",
-			"#6BA8F0",
-			"#A78BDB",
-			"#8FBF8F",
-		],
-		grid: "rgba(255,255,255,0.07)",
-		axis: "rgba(255,255,255,0.38)",
-		areaFrom: "rgba(108,115,240,0.20)",
-		areaTo: "rgba(108,115,240,0)",
-		avg: "rgba(255,255,255,0.28)",
-		cross: "rgba(255,255,255,0.30)",
-		accent: "#6C73F0",
-		heat: (a) => `rgba(108,115,240,${0.06 + a * 0.82})`,
-	},
 	blueprint: {
 		bg: "#113C82",
 		palette: [
@@ -166,7 +139,7 @@ export function useChartTokens(): ChartTokens {
 }
 
 function isThemeId(v: unknown): v is ThemeId {
-	return v === "print" || v === "dark" || v === "blueprint";
+	return v === "print" || v === "blueprint";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -213,4 +186,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
  * Inline bootstrap script injected before first paint: restores the
  * saved theme so the page never flashes the wrong one.
  */
-export const THEME_BOOTSTRAP = `try{var t=localStorage.getItem("${THEME_STORAGE_KEY}");if(t==="print"||t==="dark"||t==="blueprint"){document.documentElement.dataset.theme=t}}catch(e){}`;
+export const THEME_BOOTSTRAP = `try{var t=localStorage.getItem("${THEME_STORAGE_KEY}");if(t==="print"||t==="blueprint"){document.documentElement.dataset.theme=t}}catch(e){}`;

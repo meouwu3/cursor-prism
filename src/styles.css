@@ -5,7 +5,7 @@
 }
 
 /* ==========================================================================
-   Theme tokens — three design languages on one semantic skeleton.
+   Theme tokens — two design languages on one semantic skeleton.
    ========================================================================== */
 
 :root,
@@ -22,22 +22,6 @@
 	--accent-ink: #fffef9;
 	--radius: 2px;
 	--font-display: Georgia, "Times New Roman", serif;
-	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
-}
-
-[data-theme="dark"] {
-	color-scheme: dark;
-	--bg: #0b0b0c;
-	--bg-2: #141416;
-	--ink: #f2f2f3;
-	--ink-2: #a3a3aa;
-	--ink-3: #63636b;
-	--line: #26262a;
-	--line-strong: #43434a;
-	--accent: #6c73f0;
-	--accent-ink: #ffffff;
-	--radius: 10px;
-	--font-display: "Inter", -apple-system, "Helvetica Neue", sans-serif;
 	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
 }
 
@@ -180,9 +164,6 @@ body::before {
 [data-theme="print"] .display {
 	letter-spacing: -0.015em;
 }
-[data-theme="dark"] .display {
-	letter-spacing: -0.03em;
-}
 [data-theme="blueprint"] .display {
 	letter-spacing: -0.04em;
 }
@@ -206,7 +187,7 @@ body::before {
 	letter-spacing: -0.01em;
 }
 
-/* Panels: ruled sections on paper, hairline boxes on dark/blueprint */
+/* Panels: ruled sections on paper, hairline boxes on blueprint */
 .panel {
 	background: var(--bg-2);
 	border: 1px solid var(--line);

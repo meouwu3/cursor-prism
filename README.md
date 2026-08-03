@@ -8,14 +8,14 @@ The Cursor dashboard hands you a plain table. **Cursor Prism** turns your export
 
 ![Cursor Prism dashboard — Print theme](docs/screenshots/print-dashboard.png)
 
-## Three design languages
+## Two design languages
 
-One semantic token system, three complete looks. Switch from the top bar — the change ripples out from your cursor with a circular View-Transition reveal, and your choice is remembered.
+One semantic token system, two complete looks. Switch from the top bar — the change ripples out from your cursor with a circular View-Transition reveal, and your choice is remembered.
 
-| Print | Dark | Blueprint |
-| --- | --- | --- |
-| Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Precision tool: near-black, Inter, indigo accent, zero glow | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
-| ![Print](docs/screenshots/print-galaxy.png) | ![Dark](docs/screenshots/dark-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
+| Print | Blueprint |
+| --- | --- |
+| Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
+| ![Print](docs/screenshots/print-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
 
 ## Six lenses
 
@@ -66,7 +66,7 @@ src/
 │   │                       #   CompositionBars / UsageHeatmap / TopRequests / Galaxy (3D)
 │   ├── KpiRow.tsx          # KPI strip with rolling numbers
 │   ├── InsightsGrid.tsx    # Auto-insight cards
-│   ├── ThemeSwitcher.tsx   # Print / Dark / Blueprint swatches
+│   ├── ThemeSwitcher.tsx   # Print / Blueprint swatches
 │   ├── UploadZone.tsx      # Drag & drop upload
 │   └── Logo.tsx            # currentColor-driven prism mark
 └── routes/

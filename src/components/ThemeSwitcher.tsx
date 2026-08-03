@@ -1,5 +1,5 @@
 /**
- * Theme switcher: three mini swatches previewing each design language.
+ * Theme switcher: mini swatches previewing each design language.
  * The switch fires a circular View-Transition reveal from the click point.
  *
  * The active state is only rendered after mount: SSR always renders the
