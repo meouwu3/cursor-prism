@@ -477,6 +477,25 @@ p {
 	animation-delay: var(--d, 0ms);
 }
 
+/* Scroll reveal: heavy fade up with blur, driven by IntersectionObserver
+   (the Reveal component). 32px of travel — the blur carries the weight,
+   not the distance. --d staggers siblings. */
+.reveal {
+	opacity: 0;
+	transform: translateY(32px);
+	filter: blur(8px);
+	transition:
+		opacity 0.9s var(--ease),
+		transform 0.9s var(--ease),
+		filter 0.9s var(--ease);
+	transition-delay: var(--d, 0ms);
+}
+.reveal-on {
+	opacity: 1;
+	transform: translateY(0);
+	filter: blur(0);
+}
+
 /* Logo signature draw-in: strokes are normalized to pathLength="1",
    --d sets the delay, --dd the draw duration */
 @keyframes logo-draw {
@@ -500,5 +519,11 @@ p {
 	.logo-draw {
 		animation: none;
 		stroke-dashoffset: 0;
+	}
+	.reveal {
+		opacity: 1;
+		transform: none;
+		filter: none;
+		transition: none;
 	}
 }

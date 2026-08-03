@@ -4,6 +4,7 @@ import { Logo } from "#/components/Logo";
 import { TaglineReveal } from "#/components/TaglineReveal";
 import { ThemeSwitcher } from "#/components/ThemeSwitcher";
 import { UploadZone } from "#/components/UploadZone";
+import { Reveal, useInView } from "#/components/ui";
 import { CsvParseError } from "#/lib/csv";
 import { setUsageCsv } from "#/lib/store";
 
@@ -97,9 +98,9 @@ function Landing() {
 
 	return (
 		<div className="relative min-h-dvh">
-			<div className="relative mx-auto max-w-6xl px-5 pt-7 pb-20 sm:px-8">
-				{/* Top bar */}
-				<header className="fade-in rule-t-strong flex items-center justify-between pt-4">
+			{/* Sticky glass masthead */}
+			<header className="masthead fade-in">
+				<div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
 					<div className="flex items-center gap-2.5">
 						<Logo size={30} />
 						<span className="display text-lg font-semibold tracking-tight">
@@ -110,10 +111,12 @@ function Landing() {
 						<span className="kicker hidden sm:block">open source (MIT)</span>
 						<ThemeSwitcher />
 					</div>
-				</header>
+				</div>
+			</header>
 
+			<div className="relative mx-auto max-w-6xl px-5 pb-20 sm:px-8">
 				{/* Hero — left aligned, meta column on the right */}
-				<section className="mt-14 grid gap-10 sm:mt-20 lg:grid-cols-12">
+				<section className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-12">
 					<div className="lg:col-span-7">
 						<div className="rise kicker">Cursor usage observatory</div>
 						<h1
@@ -175,17 +178,14 @@ function Landing() {
 
 				{/* How it works — full width ruled rows */}
 				<section className="mt-20 max-w-3xl">
-					<div
-						className="rise mb-5"
-						style={{ "--d": "380ms" } as React.CSSProperties}
-					>
+					<Reveal className="mb-5">
 						<div className="kicker">How it works</div>
-					</div>
+					</Reveal>
 					{STEPS.map((s, i) => (
-						<div
+						<Reveal
 							key={s.n}
-							className="rule-t rise grid grid-cols-[3rem_8rem_1fr] items-baseline gap-4 py-4"
-							style={{ "--d": `${420 + i * 80}ms` } as React.CSSProperties}
+							className="rule-t grid grid-cols-[3rem_8rem_1fr] items-baseline gap-4 py-4"
+							delay={i * 90}
 						>
 							<span className="num text-xs" style={{ color: "var(--accent)" }}>
 								{s.n}
@@ -194,30 +194,27 @@ function Landing() {
 							<span className="text-sm" style={{ color: "var(--ink-2)" }}>
 								{s.desc}
 							</span>
-						</div>
+						</Reveal>
 					))}
 				</section>
 
 				{/* Benefits — asymmetric two column index */}
 				<section className="mt-20">
-					<div
-						className="rise mb-6"
-						style={{ "--d": "480ms" } as React.CSSProperties}
-					>
+					<Reveal className="mb-6">
 						<div className="kicker">The index</div>
 						<h2 className="display mt-1 text-2xl font-semibold">
 							Two lenses on your usage
 						</h2>
-					</div>
+					</Reveal>
 					<div className="grid gap-x-16 sm:grid-cols-2">
 						<div>
 							{FEATURES.filter((_, i) => i % 2 === 0).map((f, i) => (
-								<Feature key={f.title} f={f} d={520 + i * 70} />
+								<Feature key={f.title} f={f} d={i * 90} />
 							))}
 						</div>
 						<div className="sm:mt-16">
 							{FEATURES.filter((_, i) => i % 2 === 1).map((f, i) => (
-								<Feature key={f.title} f={f} d={560 + i * 70} />
+								<Feature key={f.title} f={f} d={60 + i * 90} />
 							))}
 						</div>
 					</div>
@@ -233,15 +230,15 @@ function Landing() {
 
 				{/* FAQ — side by side, no accordion */}
 				<section className="mt-24">
-					<div className="mb-6">
+					<Reveal className="mb-6">
 						<div className="kicker">Questions</div>
 						<h2 className="display mt-1 text-2xl font-semibold">
 							Asked and answered
 						</h2>
-					</div>
+					</Reveal>
 					<div className="grid gap-x-16 sm:grid-cols-2">
-						{FAQ.map((f) => (
-							<div key={f.q} className="rule-t py-4">
+						{FAQ.map((f, i) => (
+							<Reveal key={f.q} className="rule-t py-4" delay={i * 70}>
 								<div className="display text-base font-semibold">{f.q}</div>
 								<p
 									className="mt-1.5 text-sm leading-relaxed"
@@ -249,36 +246,62 @@ function Landing() {
 								>
 									{f.a}
 								</p>
-							</div>
+							</Reveal>
 						))}
 					</div>
 				</section>
 
 				{/* Final CTA — identical to the top */}
 				<section className="mt-24 max-w-2xl">
-					<h2 className="display mb-5 text-2xl font-semibold">
-						Ready when your CSV is.
-					</h2>
-					<UploadZone onFile={onFile} error={error} compact />
+					<OutlineFillHeading
+						text="Ready when your CSV is."
+						className="display mb-5 text-2xl font-semibold"
+					/>
+					<Reveal delay={120}>
+						<UploadZone onFile={onFile} error={error} compact />
+					</Reveal>
 				</section>
 
-				<footer
-					className="fade-in rule-t mt-20 pt-5 text-xs"
+				<Reveal
+					className="rule-t mt-20 pt-5 text-xs"
 					style={{ color: "var(--ink-3)" }}
 				>
 					<p>Cursor Prism — your data never leaves the browser.</p>
-				</footer>
+				</Reveal>
 			</div>
 		</div>
 	);
 }
 
+/** Heading that enters as an outline and fills with ink on scroll. */
+function OutlineFillHeading({
+	text,
+	className = "",
+}: {
+	text: string;
+	className?: string;
+}) {
+	const [ref, inView] = useInView<HTMLHeadingElement>();
+	return (
+		<h2
+			ref={ref}
+			className={className}
+			style={{
+				color: inView ? "var(--ink)" : "transparent",
+				WebkitTextStroke: "1px",
+				WebkitTextStrokeColor: inView ? "transparent" : "var(--ink-3)",
+				transition:
+					"color 1s var(--ease), -webkit-text-stroke-color 1s var(--ease)",
+			}}
+		>
+			{text}
+		</h2>
+	);
+}
+
 function Feature({ f, d }: { f: { title: string; desc: string }; d: number }) {
 	return (
-		<div
-			className="rule-t rise py-4"
-			style={{ "--d": `${d}ms` } as React.CSSProperties}
-		>
+		<Reveal className="rule-t py-4" delay={d}>
 			<div className="display text-base font-semibold">{f.title}</div>
 			<p
 				className="mt-1 text-sm leading-relaxed"
@@ -286,6 +309,6 @@ function Feature({ f, d }: { f: { title: string; desc: string }; d: number }) {
 			>
 				{f.desc}
 			</p>
-		</div>
+		</Reveal>
 	);
 }

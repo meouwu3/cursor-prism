@@ -54,6 +54,63 @@ export function useMounted(): boolean {
 	return mounted;
 }
 
+/** One-shot IntersectionObserver visibility flag for scroll reveals. */
+export function useInView<T extends HTMLElement>(): [
+	RefObject<T | null>,
+	boolean,
+] {
+	const ref = useRef<T>(null);
+	const [inView, setInView] = useState(false);
+	useEffect(() => {
+		const el = ref.current;
+		if (!el) return;
+		// Already scrolled past (scroll restoration, anchor jump) —
+		// never trap content in the hidden state
+		if (el.getBoundingClientRect().bottom < 0) {
+			setInView(true);
+			return;
+		}
+		const io = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setInView(true);
+					io.disconnect();
+				}
+			},
+			// Fire a little before the element fully enters, so the reveal
+			// reads as an arrival rather than a late pop
+			{ rootMargin: "0px 0px -12% 0px", threshold: 0.05 },
+		);
+		io.observe(el);
+		return () => io.disconnect();
+	}, []);
+	return [ref, inView];
+}
+
+/** Scroll-driven reveal: heavy fade up with blur, staggered via --d. */
+export function Reveal({
+	children,
+	className = "",
+	style,
+	delay = 0,
+}: {
+	children: ReactNode;
+	className?: string;
+	style?: CSSProperties;
+	delay?: number;
+}) {
+	const [ref, inView] = useInView<HTMLDivElement>();
+	return (
+		<div
+			ref={ref}
+			className={`reveal${inView ? " reveal-on" : ""} ${className}`}
+			style={{ ...style, "--d": `${delay}ms` } as CSSProperties}
+		>
+			{children}
+		</div>
+	);
+}
+
 export function SectionTitle({
 	eyebrow,
 	title,
@@ -90,8 +147,16 @@ export function Card({
 	className?: string;
 	style?: CSSProperties;
 }) {
+	// Cursor position feeds the blueprint spotlight border (--mx / --my);
+	// written straight to the node so no re-render is involved
+	const track = (e: React.PointerEvent<HTMLDivElement>) => {
+		const r = e.currentTarget.getBoundingClientRect();
+		e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+		e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+	};
 	return (
-		<div className={`panel ${className}`} style={style}>
+		<div className={`panel ${className}`} style={style} onPointerMove={track}>
+			<div aria-hidden="true" className="panel-spot" />
 			{children}
 		</div>
 	);
