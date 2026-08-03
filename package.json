@@ -1,5 +1,16 @@
 {
-  "name": "cursor-csv",
+  "name": "cursor-prism",
+  "version": "0.1.0",
+  "description": "Refract every Cursor token into its spectrum — a local-first observatory for Cursor usage CSV exports",
+  "keywords": [
+    "cursor",
+    "token-usage",
+    "visualization",
+    "dashboard",
+    "csv",
+    "tanstack-start"
+  ],
+  "license": "MIT",
   "private": true,
   "type": "module",
   "imports": {
@@ -13,6 +24,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
+    "typecheck": "tsc --noEmit",
     "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
@@ -36,6 +48,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "babel-plugin-react-compiler": "^1.0.0",
+    "playwright-core": "^1.62.1",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "wrangler": "^4.70.0"
