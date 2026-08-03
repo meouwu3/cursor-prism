@@ -19,7 +19,7 @@ export const Route = createRootRoute({
 			{
 				name: "description",
 				content:
-					"Refract your Cursor usage CSV into a spectrum: trends, models, cache economics and a 3D token galaxy — parsed 100% locally in your browser.",
+					"Refract your Cursor usage CSV into a spectrum: trends, models and cache economics — parsed 100% locally in your browser.",
 			},
 			{
 				property: "og:title",
@@ -28,7 +28,7 @@ export const Route = createRootRoute({
 			{
 				property: "og:description",
 				content:
-					"Refract your Cursor usage CSV into a spectrum: trends, models, cache economics and a 3D token galaxy — parsed 100% locally in your browser.",
+					"Refract your Cursor usage CSV into a spectrum: trends, models and cache economics — parsed 100% locally in your browser.",
 			},
 			{
 				property: "og:type",

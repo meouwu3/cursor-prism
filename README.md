@@ -2,7 +2,7 @@
 
 > Refract every Cursor token into its spectrum.
 
-The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, models, cache economics — plus a 3D token galaxy you can grab and spin.
+The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, per-model share, cache economics — all hand-drawn, all in your browser.
 
 **100% local parsing** — your CSV never leaves the browser (`FileReader`, in-memory only). Nothing is uploaded, tracked, persisted, or stored server-side. There is no server side.
 
@@ -15,15 +15,14 @@ One semantic token system, two complete looks. Switch from the top bar — the c
 | Print | Blueprint |
 | --- | --- |
 | Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
-| ![Print](docs/screenshots/print-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
+| ![Print](docs/screenshots/print-landing.png) | ![Blueprint](docs/screenshots/blueprint-landing.png) |
 
-## Three lenses
+## Two lenses
 
 | Lens | What it shows |
 | --- | --- |
 | Trend Prism | Daily token & cost area charts with a 7-day moving-average reference |
 | Model Spectrum | Per-model share donut fused with cache/fresh-input/output composition |
-| Token Galaxy | A hand-rolled, dependency-free 3D particle cloud. Every request is a star — drag to rotate, hover to inspect |
 
 ## Quick start
 
@@ -36,13 +35,13 @@ Then:
 
 1. **Export** — open [cursor.com/dashboard](https://cursor.com/dashboard) → Usage → **Export CSV**
 2. **Drop** — drag the CSV onto the landing page (or click to browse)
-3. **Explore** — three lenses on where your tokens actually go
+3. **Explore** — two lenses on where your tokens actually go
 
 ## Tech stack
 
 - [TanStack Start](https://tanstack.com/start) + React 19 + Vite
 - Tailwind CSS v4
-- **Zero chart libraries** — every visualization is hand-rolled SVG / Canvas (area chart, donut, stacked bars, 3D particle cloud)
+- **Zero chart libraries** — every visualization is hand-rolled SVG / Canvas (area chart, donut, stacked bars)
 - Theme system: CSS variables + the View Transitions API, no runtime theme engine
 - Cloudflare Workers ready (`wrangler.jsonc`)
 
@@ -58,8 +57,7 @@ src/
 │   ├── format.ts           #   Number / timestamp formatting
 │   └── store.ts            #   Global in-memory store (no persistence)
 ├── components/
-│   ├── charts/             # Hand-rolled visuals: TimelineChart /
-│   │                       #   ModelSpectrum / Galaxy (3D)
+│   ├── charts/             # Hand-rolled visuals: TimelineChart / ModelSpectrum
 │   ├── KpiRow.tsx          # KPI strip with rolling numbers
 │   ├── TaglineReveal.tsx   # Word-by-word scroll reveal on the landing page
 │   ├── NotFound.tsx        # Branded 404

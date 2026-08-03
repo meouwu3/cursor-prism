@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Galaxy } from "#/components/charts/Galaxy";
 import { ModelSpectrum } from "#/components/charts/ModelSpectrum";
 import { TimelineChart } from "#/components/charts/TimelineChart";
 import { KpiRow } from "#/components/KpiRow";
@@ -129,36 +128,10 @@ function Dashboard() {
 				{/* KPI overview */}
 				<KpiRow summary={summary} />
 
-				{/* Token Galaxy */}
-				<section
-					className="rise mt-6"
-					style={{ "--d": "200ms" } as React.CSSProperties}
-				>
-					<Card className="overflow-hidden">
-						<div className="flex items-baseline justify-between px-5 pt-4">
-							<div>
-								<div className="kicker">token galaxy</div>
-								<h2 className="display mt-0.5 text-base font-semibold">
-									Every request is a star
-								</h2>
-							</div>
-							<div
-								className="num hidden text-xs sm:block"
-								style={{ color: "var(--ink-3)" }}
-							>
-								{rows.length} particles
-							</div>
-						</div>
-						<div className="h-[440px]">
-							<Galaxy rows={rows} />
-						</div>
-					</Card>
-				</section>
-
 				{/* Trend */}
 				<section
 					className="rise mt-6"
-					style={{ "--d": "280ms" } as React.CSSProperties}
+					style={{ "--d": "200ms" } as React.CSSProperties}
 				>
 					<Card className="px-5 pt-4 pb-3">
 						<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -200,7 +173,7 @@ function Dashboard() {
 				<section className="mt-6">
 					<Card
 						className="rise px-5 py-4"
-						style={{ "--d": "340ms" } as React.CSSProperties}
+						style={{ "--d": "280ms" } as React.CSSProperties}
 					>
 						<SectionTitle
 							eyebrow="model spectrum"
@@ -221,7 +194,7 @@ function Dashboard() {
 				{/* Request ledger */}
 				<section
 					className="rise mt-8"
-					style={{ "--d": "460ms" } as React.CSSProperties}
+					style={{ "--d": "340ms" } as React.CSSProperties}
 				>
 					<Card className="overflow-hidden">
 						<div className="flex items-baseline justify-between px-5 pt-4 pb-3">

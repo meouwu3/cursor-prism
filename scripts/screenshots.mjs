@@ -70,10 +70,9 @@ for (const theme of THEMES) {
 
 	await page.locator("input[type=file]").first().setInputFiles(FIXTURE);
 	await page.waitForURL("**/dashboard", { timeout: 8000 });
-	await page.waitForTimeout(2800); // entrance animations + galaxy spin-up
+	await page.waitForTimeout(2500); // entrance animations + count-ups settle
 	await page.screenshot({ path: `${OUT}${theme}-dashboard.png`, fullPage: true });
 	console.log(`✓ ${theme} fixture dashboard`);
-	await page.screenshot({ path: `${OUT}${theme}-galaxy.png` }); // viewport only
 	await page.close();
 }
 

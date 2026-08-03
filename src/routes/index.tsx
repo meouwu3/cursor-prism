@@ -30,7 +30,7 @@ const STEPS = [
 	{
 		n: "03",
 		title: "Explore",
-		desc: "Three lenses on where your tokens actually go",
+		desc: "Two lenses on where your tokens actually go",
 	},
 ];
 
@@ -42,10 +42,6 @@ const FEATURES = [
 	{
 		title: "Model spectrum",
 		desc: "Per model share fused with cache composition. See which model does the heavy lifting, and how hard the cache works.",
-	},
-	{
-		title: "Token galaxy",
-		desc: "A 3D particle cloud built from scratch. Every request is a star you can grab and inspect.",
 	},
 ];
 
@@ -139,8 +135,7 @@ function Landing() {
 							}
 						>
 							Cursor hands you a spreadsheet. Cursor Prism hands you an
-							observatory — trends, models, cache economics, and a 3D galaxy of
-							every request.
+							observatory — trends, models, and cache economics.
 						</p>
 					</div>
 					<dl
@@ -211,7 +206,7 @@ function Landing() {
 					>
 						<div className="kicker">The index</div>
 						<h2 className="display mt-1 text-2xl font-semibold">
-							Three lenses on your usage
+							Two lenses on your usage
 						</h2>
 					</div>
 					<div className="grid gap-x-16 sm:grid-cols-2">
