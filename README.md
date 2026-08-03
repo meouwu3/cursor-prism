@@ -4,7 +4,7 @@
 
 The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, models, cache economics, activity heat, cost concentration — plus a 3D token galaxy you can grab and spin.
 
-**100% local parsing** — your CSV never leaves the browser (`FileReader` + `sessionStorage`). Nothing is uploaded, tracked, or stored server-side. There is no server side.
+**100% local parsing** — your CSV never leaves the browser (`FileReader`, in-memory only). Nothing is uploaded, tracked, persisted, or stored server-side. There is no server side.
 
 ![Cursor Prism dashboard — Print theme](docs/screenshots/print-dashboard.png)
 
@@ -39,7 +39,7 @@ Then:
 
 1. **Export** — open [cursor.com/dashboard](https://cursor.com/dashboard) → Usage → **Export CSV**
 2. **Drop** — drag the CSV onto the landing page (or click to browse)
-3. **Explore** — no CSV yet? Hit **Load demo data** to tour the dashboard with synthesized data
+3. **Explore** — six lenses on where your tokens actually go
 
 ## Tech stack
 
@@ -57,11 +57,10 @@ src/
 │   ├── csv.ts              #   CSV parsing (quotes / escapes / BOM) and types
 │   ├── analytics.ts        #   Aggregations: trends, distribution, heat,
 │   │                       #   concentration, auto insights
-│   ├── demo-data.ts        #   Seeded demo-data generator (reproducible)
 │   ├── theme.tsx           #   Theme tokens, provider, View-Transition switching
 │   ├── colors.ts           #   Stable model → palette-slot mapping
 │   ├── format.ts           #   Number / timestamp formatting
-│   └── store.ts            #   Global store + sessionStorage persistence
+│   └── store.ts            #   Global in-memory store (no persistence)
 ├── components/
 │   ├── charts/             # Hand-rolled visuals: TimelineChart / ModelDonut /
 │   │                       #   CompositionBars / UsageHeatmap / TopRequests / Galaxy (3D)
@@ -71,7 +70,7 @@ src/
 │   ├── UploadZone.tsx      # Drag & drop upload
 │   └── Logo.tsx            # currentColor-driven prism mark
 └── routes/
-    ├── index.tsx           # Landing: upload + demo-data entry
+    ├── index.tsx           # Landing: CSV upload
     └── dashboard.tsx       # The observatory
 ```
 
@@ -88,7 +87,7 @@ pnpm deploy       # Build & deploy to Cloudflare Workers
 
 ## Privacy
 
-Cursor Prism has no backend, no database, and no analytics. Your CSV lives only in browser memory and `sessionStorage` — hit **Clear** or close the tab and it's gone. The source is right here; audit away.
+Cursor Prism has no backend, no database, and no analytics. Your CSV lives only in browser memory — navigate away or close the tab and it's gone. The only thing ever persisted is your theme choice (`localStorage`), never your data. The source is right here; audit away.
 
 ## License
 
