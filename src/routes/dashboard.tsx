@@ -95,7 +95,7 @@ function Dashboard() {
 						<button
 							type="button"
 							onClick={() => fileInput.current?.click()}
-							className="btn"
+							className="btn-quiet"
 						>
 							Change CSV
 						</button>

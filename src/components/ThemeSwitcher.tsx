@@ -16,7 +16,7 @@ export function ThemeSwitcher() {
 
 	return (
 		<div
-			className="flex items-center gap-1 border p-1"
+			className="theme-switch flex h-8 items-center gap-1 border px-1"
 			style={{
 				borderColor: "var(--line)",
 				borderRadius: "var(--radius)",

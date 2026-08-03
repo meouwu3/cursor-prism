@@ -342,12 +342,46 @@ p {
 	gap: 0.5em;
 	font-family: var(--font-mono);
 	font-size: 12px;
+	height: 32px;
 	color: var(--ink-2);
 	border: 1px solid var(--line);
 	border-radius: var(--radius);
-	padding: 0.45em 0.9em;
+	padding: 0 0.9em;
 }
 [data-theme="blueprint"] .chip {
+	border-style: dashed;
+}
+
+/* Quiet header actions: same 32px rhythm as chips and the theme switcher */
+.btn-quiet {
+	display: inline-flex;
+	align-items: center;
+	font-family: var(--font-body);
+	font-size: 12px;
+	font-weight: 500;
+	height: 32px;
+	padding: 0 12px;
+	border: 1px solid var(--line);
+	color: var(--ink-2);
+	background: transparent;
+	border-radius: var(--radius);
+	cursor: pointer;
+	transition:
+		border-color 0.25s var(--ease),
+		color 0.25s var(--ease),
+		transform 0.15s var(--ease);
+}
+.btn-quiet:hover {
+	color: var(--ink);
+	border-color: var(--line-strong);
+}
+.btn-quiet:active {
+	transform: scale(0.98);
+}
+[data-theme="blueprint"] .btn-quiet {
+	border-style: dashed;
+}
+[data-theme="blueprint"] .theme-switch {
 	border-style: dashed;
 }
 
