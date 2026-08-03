@@ -255,8 +255,7 @@ function Dashboard() {
 					className="rule-t mt-14 pt-5 text-center text-xs"
 					style={{ color: "var(--ink-3)" }}
 				>
-					Cursor Prism — data lives only in browser memory. Built with TanStack
-					Start.
+					Cursor Prism — data lives only in browser memory.
 				</footer>
 			</div>
 		</div>

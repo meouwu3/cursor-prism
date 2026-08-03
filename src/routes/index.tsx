@@ -275,10 +275,7 @@ function Landing() {
 					className="fade-in rule-t mt-20 pt-5 text-xs"
 					style={{ color: "var(--ink-3)" }}
 				>
-					<p>
-						Cursor Prism — built with TanStack Start. Your data never leaves the
-						browser.
-					</p>
+					<p>Cursor Prism — your data never leaves the browser.</p>
 				</footer>
 			</div>
 		</div>
