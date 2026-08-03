@@ -271,7 +271,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 
 			{/* Interaction hint */}
 			<div className="kicker pointer-events-none absolute bottom-3 left-4">
-				drag to rotate · hover to inspect
+				drag to rotate / hover to inspect
 			</div>
 
 			{/* Hover detail */}
@@ -299,7 +299,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 						</span>
 					</div>
 					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
-						{tip.row.model} · {formatCost(tip.row.cost)}
+						{tip.row.model} / {formatCost(tip.row.cost)}
 					</div>
 				</div>
 			) : null}

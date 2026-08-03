@@ -1,12 +1,12 @@
-# CursorPrism
+# Cursor Prism
 
 > Refract every Cursor token into its spectrum.
 
-The Cursor dashboard hands you a plain table. **CursorPrism** turns your exported usage CSV into an observatory: trends, models, cache economics, activity heat, cost concentration — plus a 3D token galaxy you can grab and spin.
+The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, models, cache economics, activity heat, cost concentration — plus a 3D token galaxy you can grab and spin.
 
 **100% local parsing** — your CSV never leaves the browser (`FileReader` + `sessionStorage`). Nothing is uploaded, tracked, or stored server-side. There is no server side.
 
-![CursorPrism dashboard — Print theme](docs/screenshots/print-dashboard.png)
+![Cursor Prism dashboard — Print theme](docs/screenshots/print-dashboard.png)
 
 ## Three design languages
 
@@ -88,7 +88,7 @@ pnpm deploy       # Build & deploy to Cloudflare Workers
 
 ## Privacy
 
-CursorPrism has no backend, no database, and no analytics. Your CSV lives only in browser memory and `sessionStorage` — hit **Clear** or close the tab and it's gone. The source is right here; audit away.
+Cursor Prism has no backend, no database, and no analytics. Your CSV lives only in browser memory and `sessionStorage` — hit **Clear** or close the tab and it's gone. The source is right here; audit away.
 
 ## License
 

@@ -1,5 +1,5 @@
 /**
- * CursorPrism mark: a beam refracted into a spectrum.
+ * Cursor Prism mark: a beam refracted into a spectrum.
  * Drawn entirely in currentColor + the theme accent, so it sits
  * correctly on paper, on near-black, and on blueprint blue.
  */
@@ -11,10 +11,10 @@ export function Logo({ size = 34 }: { size?: number }) {
 			viewBox="0 0 48 48"
 			fill="none"
 			role="img"
-			aria-label="CursorPrism"
+			aria-label="Cursor Prism"
 			style={{ color: "var(--ink)" }}
 		>
-			<title>CursorPrism</title>
+			<title>Cursor Prism</title>
 			{/* Incoming beam */}
 			<line
 				x1="2"

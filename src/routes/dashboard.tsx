@@ -106,7 +106,7 @@ function Dashboard() {
 					>
 						<Logo size={26} />
 						<span className="display text-[15px] font-semibold tracking-tight">
-							CursorPrism
+							Cursor Prism
 						</span>
 					</Link>
 
@@ -114,12 +114,12 @@ function Dashboard() {
 						<span className="chip">
 							{data.isDemo ? (
 								<>
-									demo data · {formatDay(summary.rangeStart)} ~{" "}
+									demo data — {formatDay(summary.rangeStart)} ~{" "}
 									{formatDay(summary.rangeEnd)}
 								</>
 							) : (
 								<>
-									{data.fileName} · {formatDay(summary.rangeStart)} ~{" "}
+									{data.fileName} — {formatDay(summary.rangeStart)} ~{" "}
 									{formatDay(summary.rangeEnd)}
 								</>
 							)}
@@ -337,7 +337,7 @@ function Dashboard() {
 					className="rule-t mt-14 pt-5 text-center text-[12px]"
 					style={{ color: "var(--ink-3)" }}
 				>
-					CursorPrism · data lives only in your browser · built with TanStack
+					Cursor Prism — data lives only in your browser — built with TanStack
 					Start
 				</footer>
 			</div>

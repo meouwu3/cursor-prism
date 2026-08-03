@@ -14,7 +14,7 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "CursorPrism · Cursor Token Observatory",
+				title: "Cursor Prism — Token Observatory",
 			},
 			{
 				name: "description",

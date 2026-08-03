@@ -100,11 +100,11 @@ function Landing() {
 					<div className="flex items-center gap-2.5">
 						<Logo size={30} />
 						<span className="display text-[17px] font-semibold tracking-tight">
-							CursorPrism
+							Cursor Prism
 						</span>
 					</div>
 					<div className="flex items-center gap-4">
-						<span className="kicker hidden sm:block">open source · MIT</span>
+						<span className="kicker hidden sm:block">open source (MIT)</span>
 						<ThemeSwitcher />
 					</div>
 				</header>
@@ -129,7 +129,7 @@ function Landing() {
 							} as React.CSSProperties
 						}
 					>
-						Cursor hands you a spreadsheet. CursorPrism hands you an
+						Cursor hands you a spreadsheet. Cursor Prism hands you an
 						observatory.
 						<br className="hidden sm:block" />
 						Trends, models, cache economics, heat — and a 3D galaxy of every
@@ -153,7 +153,7 @@ function Landing() {
 								onClick={() => navigate({ to: "/dashboard" })}
 								className="btn"
 							>
-								Resume · {data.fileName}
+								Resume — {data.fileName}
 							</button>
 						) : null}
 						{data.status === "ready" ? (
@@ -250,8 +250,8 @@ function Landing() {
 					}
 				>
 					<p>
-						CursorPrism — built with TanStack Start · your data never leaves the
-						browser
+						Cursor Prism — built with TanStack Start . Your data never leaves
+						the browser
 					</p>
 				</footer>
 			</div>

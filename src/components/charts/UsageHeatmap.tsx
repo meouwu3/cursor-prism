@@ -84,7 +84,7 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 					<>
 						<span>
 							{WEEKDAY_LABELS[hover.weekday]}{" "}
-							{String(hover.hour).padStart(2, "0")}:00 · {hover.count} requests
+							{String(hover.hour).padStart(2, "0")}:00, {hover.count} requests
 						</span>
 						<span style={{ color: "var(--accent)" }}>
 							{formatTokens(hover.tokens)} tokens
