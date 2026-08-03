@@ -14,7 +14,7 @@ One semantic token system, three complete looks. Switch from the top bar — the
 
 | Print | Dark | Blueprint |
 | --- | --- | --- |
-| Editorial paper: Fraunces serif, ruled hairlines, vermilion accent, flat infographics | Precision tool: near-black, Inter, indigo accent, zero glow | Technical drawing: IBM Plex Mono, graph paper, construction dashes, one amber highlight |
+| Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Precision tool: near-black, Inter, indigo accent, zero glow | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
 | ![Print](docs/screenshots/print-galaxy.png) | ![Dark](docs/screenshots/dark-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
 
 ## Six lenses

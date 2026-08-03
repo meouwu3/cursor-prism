@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-	--font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+	--font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 /* ==========================================================================
@@ -21,7 +21,7 @@
 	--accent: #d9481c;
 	--accent-ink: #fffef9;
 	--radius: 2px;
-	--font-display: "Fraunces", Georgia, "Times New Roman", serif;
+	--font-display: Georgia, "Times New Roman", serif;
 	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
 }
 
@@ -53,8 +53,8 @@
 	--accent: #ffd447;
 	--accent-ink: #113c82;
 	--radius: 2px;
-	--font-display: "IBM Plex Mono", ui-monospace, monospace;
-	--font-body: "IBM Plex Mono", ui-monospace, monospace;
+	--font-display: "Geist Mono", ui-monospace, monospace;
+	--font-body: "Geist Mono", ui-monospace, monospace;
 }
 
 /* ==========================================================================
