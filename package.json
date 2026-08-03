@@ -25,6 +25,7 @@
     "lint": "biome lint",
     "check": "biome check",
     "typecheck": "tsc --noEmit",
+    "screenshots": "node scripts/screenshots.mjs",
     "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
