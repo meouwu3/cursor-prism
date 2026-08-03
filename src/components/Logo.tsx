@@ -1,4 +1,8 @@
-/** CursorPrism mark: a beam of white light refracted into a spectrum. */
+/**
+ * CursorPrism mark: a beam refracted into a spectrum.
+ * Drawn entirely in currentColor + the theme accent, so it sits
+ * correctly on paper, on near-black, and on blueprint blue.
+ */
 export function Logo({ size = 34 }: { size?: number }) {
 	return (
 		<svg
@@ -8,25 +12,19 @@ export function Logo({ size = 34 }: { size?: number }) {
 			fill="none"
 			role="img"
 			aria-label="CursorPrism"
+			style={{ color: "var(--ink)" }}
 		>
 			<title>CursorPrism</title>
-			<defs>
-				<linearGradient id="prism-edge" x1="0" y1="0" x2="1" y2="1">
-					<stop offset="0" stopColor="#67e8f9" />
-					<stop offset="0.5" stopColor="#a5b4fc" />
-					<stop offset="1" stopColor="#f0abfc" />
-				</linearGradient>
-			</defs>
 			{/* Incoming beam */}
 			<line
 				x1="2"
 				y1="20"
 				x2="18"
 				y2="24"
-				stroke="#e2e8f0"
+				stroke="currentColor"
 				strokeWidth="1.6"
 				strokeLinecap="round"
-				opacity="0.85"
+				opacity="0.55"
 			/>
 			{/* Refracted spectrum */}
 			<line
@@ -34,7 +32,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 				y1="22"
 				x2="46"
 				y2="14"
-				stroke="#67e8f9"
+				stroke="var(--accent)"
 				strokeWidth="1.8"
 				strokeLinecap="round"
 			/>
@@ -43,41 +41,45 @@ export function Logo({ size = 34 }: { size?: number }) {
 				y1="24"
 				x2="46"
 				y2="21"
-				stroke="#a5b4fc"
+				stroke="currentColor"
 				strokeWidth="1.8"
 				strokeLinecap="round"
+				opacity="0.85"
 			/>
 			<line
 				x1="30"
 				y1="26"
 				x2="46"
 				y2="28"
-				stroke="#f0abfc"
+				stroke="currentColor"
 				strokeWidth="1.8"
 				strokeLinecap="round"
+				opacity="0.5"
 			/>
 			<line
 				x1="30"
 				y1="28"
 				x2="46"
 				y2="35"
-				stroke="#fcd34d"
+				stroke="var(--accent)"
 				strokeWidth="1.8"
 				strokeLinecap="round"
+				opacity="0.65"
 			/>
 			{/* The prism */}
 			<path
 				d="M24 8 L36 36 L12 36 Z"
-				fill="rgba(148,163,255,0.08)"
-				stroke="url(#prism-edge)"
+				fill="none"
+				stroke="currentColor"
 				strokeWidth="1.6"
 				strokeLinejoin="round"
 			/>
 			<path
 				d="M20 22 L28 26"
-				stroke="rgba(255,255,255,0.5)"
+				stroke="currentColor"
 				strokeWidth="1"
 				strokeLinecap="round"
+				opacity="0.5"
 			/>
 		</svg>
 	);

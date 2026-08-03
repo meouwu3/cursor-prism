@@ -1,6 +1,7 @@
 /**
  * CSV upload zone: click to browse or drop a file; parsed locally,
- * then handed to the caller. Drag state glows, parse errors surface inline.
+ * then handed to the caller. Drag state flips the hairline to the
+ * accent color; parse errors surface inline.
  */
 
 import { useRef, useState } from "react";
@@ -37,44 +38,27 @@ export function UploadZone({
 					setDragging(false);
 					handle(e.dataTransfer.files);
 				}}
-				className={`group relative flex w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[20px] border border-dashed text-center transition-all duration-300 ${
+				className={`group relative flex w-full cursor-pointer flex-col items-center justify-center border border-dashed text-center transition-colors duration-200 ${
 					compact ? "px-6 py-6" : "px-8 py-14"
 				}`}
 				style={{
-					borderColor: dragging
-						? "rgba(103,232,249,0.8)"
-						: "rgba(148,163,255,0.3)",
-					background: dragging
-						? "rgba(103,232,249,0.06)"
-						: "rgba(148,163,255,0.03)",
-					boxShadow: dragging
-						? "0 0 48px -6px rgba(103,232,249,0.35), inset 0 0 32px rgba(103,232,249,0.06)"
-						: undefined,
+					borderRadius: "var(--radius)",
+					borderColor: dragging ? "var(--accent)" : "var(--line-strong)",
+					background: dragging ? "var(--bg-2)" : "transparent",
 				}}
 			>
-				{/* Scan line across the top edge */}
+				{/* Upload icon: hairline circle + arrow */}
 				<span
-					className="pointer-events-none absolute inset-x-8 top-0 h-px opacity-60"
-					style={{
-						background:
-							"linear-gradient(90deg, transparent, rgba(103,232,249,0.6), transparent)",
-					}}
-				/>
-
-				{/* Upload icon */}
-				<span
-					className={`mb-4 flex items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:-translate-y-1 ${
+					className={`mb-4 flex items-center justify-center rounded-full border transition-transform duration-200 group-hover:-translate-y-0.5 ${
 						compact ? "h-11 w-11" : "h-14 w-14"
 					}`}
 					style={{
-						borderColor: "rgba(103,232,249,0.35)",
-						background: "rgba(103,232,249,0.08)",
-						boxShadow: "0 0 24px -4px rgba(103,232,249,0.3)",
+						borderColor: dragging ? "var(--accent)" : "var(--line-strong)",
 					}}
 				>
 					<svg
-						width={compact ? 20 : 26}
-						height={compact ? 20 : 26}
+						width={compact ? 18 : 22}
+						height={compact ? 18 : 22}
 						viewBox="0 0 24 24"
 						fill="none"
 						role="img"
@@ -82,32 +66,31 @@ export function UploadZone({
 						<title>Upload CSV file</title>
 						<path
 							d="M12 16V4m0 0l-4 4m4-4l4 4"
-							stroke="#67e8f9"
-							strokeWidth="1.8"
+							stroke="var(--ink)"
+							strokeWidth="1.6"
 							strokeLinecap="round"
 							strokeLinejoin="round"
 						/>
 						<path
 							d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"
-							stroke="#67e8f9"
-							strokeWidth="1.8"
+							stroke="var(--ink-3)"
+							strokeWidth="1.6"
 							strokeLinecap="round"
-							opacity="0.6"
 						/>
 					</svg>
 				</span>
 
 				<span
-					className={`font-medium text-white/90 ${compact ? "text-[14px]" : "text-[16px]"}`}
+					className={`display font-medium ${compact ? "text-[14px]" : "text-[16px]"}`}
 				>
 					{dragging
 						? "Release to refract"
 						: "Drop your CSV, or click to browse"}
 				</span>
 				{!compact && (
-					<span className="mt-2 text-[13px] text-slate-500">
+					<span className="mt-2 text-[13px]" style={{ color: "var(--ink-3)" }}>
 						Exported from{" "}
-						<span className="num text-slate-400">
+						<span className="num" style={{ color: "var(--ink-2)" }}>
 							cursor.com/dashboard → Usage → Export CSV
 						</span>
 					</span>
@@ -126,7 +109,14 @@ export function UploadZone({
 			</button>
 
 			{error ? (
-				<div className="mt-3 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-2.5 text-[13px] text-red-300">
+				<div
+					className="mt-3 border px-4 py-2.5 text-[13px]"
+					style={{
+						borderRadius: "var(--radius)",
+						borderColor: "var(--accent)",
+						color: "var(--accent)",
+					}}
+				>
 					Parse failed: {error}
 				</div>
 			) : null}

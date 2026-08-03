@@ -2,11 +2,13 @@
  * Usage trend chart: area + smoothed line + 7-day moving-average
  * reference. Hand-rolled SVG; the draw-in animation uses the pathLength
  * trick, and hovering shows a crosshair with a detail tooltip.
+ * All colors come from the active theme's chart tokens.
  */
 
 import { useMemo, useState } from "react";
 import type { DayPoint } from "#/lib/analytics";
 import { formatCost, formatDayShort, formatTokens } from "#/lib/format";
+import { useChartTokens } from "#/lib/theme";
 import { useContainerSize } from "../ui";
 
 type Mode = "tokens" | "cost";
@@ -43,6 +45,7 @@ export function TimelineChart({
 	mode: Mode;
 	height?: number;
 }) {
+	const tokens = useChartTokens();
 	const [wrapRef, { width }] = useContainerSize<HTMLDivElement>();
 	const [hover, setHover] = useState<number | null>(null);
 	const [drawn, setDrawn] = useState(false);
@@ -91,7 +94,7 @@ export function TimelineChart({
 	// Trigger the draw-in animation after mount
 	if (geo && !drawn) requestAnimationFrame(() => setDrawn(true));
 
-	const accent = mode === "tokens" ? "#67e8f9" : "#f0abfc";
+	const accent = tokens.accent;
 	const fmt = mode === "tokens" ? formatTokens : formatCost;
 
 	const onMove = (e: React.MouseEvent<SVGSVGElement>) => {
@@ -124,8 +127,8 @@ export function TimelineChart({
 				>
 					<defs>
 						<linearGradient id={`tl-fill-${mode}`} x1="0" y1="0" x2="0" y2="1">
-							<stop offset="0" stopColor={accent} stopOpacity="0.32" />
-							<stop offset="1" stopColor={accent} stopOpacity="0" />
+							<stop offset="0" stopColor={tokens.areaFrom} />
+							<stop offset="1" stopColor={tokens.areaTo} />
 						</linearGradient>
 					</defs>
 
@@ -137,7 +140,7 @@ export function TimelineChart({
 								x2={geo.w - MR}
 								y1={t.y}
 								y2={t.y}
-								stroke="rgba(148,163,255,0.08)"
+								stroke={tokens.grid}
 								strokeDasharray="3 5"
 							/>
 							<text
@@ -145,7 +148,7 @@ export function TimelineChart({
 								y={t.y + 4}
 								textAnchor="end"
 								fontSize="10"
-								fill="rgba(148,163,255,0.45)"
+								fill={tokens.axis}
 								fontFamily="var(--font-mono)"
 							>
 								{fmt(t.v)}
@@ -165,7 +168,7 @@ export function TimelineChart({
 					<path
 						d={geo.avgLine}
 						fill="none"
-						stroke="rgba(226,232,255,0.28)"
+						stroke={tokens.avg}
 						strokeWidth="1.2"
 						strokeDasharray="4 5"
 					/>
@@ -175,14 +178,13 @@ export function TimelineChart({
 						d={geo.line}
 						fill="none"
 						stroke={accent}
-						strokeWidth="2.2"
+						strokeWidth="2"
 						strokeLinecap="round"
 						pathLength={1}
 						strokeDasharray={1}
 						strokeDashoffset={drawn ? 0 : 1}
 						style={{
 							transition: "stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1)",
-							filter: `drop-shadow(0 0 6px ${accent}66)`,
 						}}
 					/>
 
@@ -194,7 +196,7 @@ export function TimelineChart({
 							y={geo.h - 8}
 							textAnchor="middle"
 							fontSize="10"
-							fill="rgba(148,163,255,0.45)"
+							fill={tokens.axis}
 							fontFamily="var(--font-mono)"
 						>
 							{t.label}
@@ -208,15 +210,12 @@ export function TimelineChart({
 									key={`${cx}-${cy}`}
 									cx={cx}
 									cy={cy}
-									r="5.5"
+									r="5"
 									fill={accent}
-									stroke="#05050e"
+									stroke={tokens.bg}
 									strokeWidth="2"
 									opacity={drawn ? 1 : 0}
-									style={{
-										transition: "opacity 0.6s ease 0.6s",
-										filter: `drop-shadow(0 0 8px ${accent})`,
-									}}
+									style={{ transition: "opacity 0.6s ease 0.6s" }}
 								/>
 							))
 						: null}
@@ -229,7 +228,7 @@ export function TimelineChart({
 								x2={geo.pts[hover][0]}
 								y1={MT}
 								y2={geo.h - MB}
-								stroke="rgba(226,232,255,0.3)"
+								stroke={tokens.cross}
 								strokeDasharray="2 3"
 							/>
 							<circle
@@ -237,7 +236,7 @@ export function TimelineChart({
 								cy={geo.pts[hover][1]}
 								r="4.5"
 								fill={accent}
-								stroke="#05050e"
+								stroke={tokens.bg}
 								strokeWidth="2"
 							/>
 						</g>
@@ -254,7 +253,7 @@ export function TimelineChart({
 						top: Math.max(geo.pts[hover][1] - 96, 0),
 					}}
 				>
-					<div className="num text-[11px] text-slate-400">
+					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
 						{points[hover].key}
 					</div>
 					<div
@@ -262,11 +261,14 @@ export function TimelineChart({
 						style={{ color: accent }}
 					>
 						{fmt(values[hover])}
-						<span className="ml-1.5 font-normal text-slate-500">
+						<span
+							className="ml-1.5 font-normal"
+							style={{ color: "var(--ink-3)" }}
+						>
 							{mode === "tokens" ? "tokens" : "spent"}
 						</span>
 					</div>
-					<div className="num text-[11px] text-slate-500">
+					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
 						{points[hover].count} requests
 					</div>
 				</div>

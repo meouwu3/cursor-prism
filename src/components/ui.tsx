@@ -67,12 +67,13 @@ export function SectionTitle({
 }) {
 	return (
 		<div className="rise mb-5" style={{ "--d": `${delay}ms` } as CSSProperties}>
-			<div className="num mb-1.5 text-[11px] uppercase tracking-[0.3em] text-cyan-300/70">
-				{eyebrow}
-			</div>
-			<h2 className="text-xl font-semibold text-white/95">{title}</h2>
+			<div className="kicker mb-1.5">{eyebrow}</div>
+			<h2 className="display text-xl font-semibold">{title}</h2>
 			{desc ? (
-				<p className="mt-1 text-[13px] leading-relaxed text-slate-400">
+				<p
+					className="mt-1 text-[13px] leading-relaxed"
+					style={{ color: "var(--ink-2)" }}
+				>
 					{desc}
 				</p>
 			) : null}
@@ -90,7 +91,7 @@ export function Card({
 	style?: CSSProperties;
 }) {
 	return (
-		<div className={`glass ${className}`} style={style}>
+		<div className={`panel ${className}`} style={style}>
 			{children}
 		</div>
 	);

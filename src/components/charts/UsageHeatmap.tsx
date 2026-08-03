@@ -1,16 +1,19 @@
 /**
  * Activity heatmap: token burn intensity across 7 weekdays × 24 hours.
  * Brightness is sqrt-scaled so extreme values don't flatten the rest.
+ * Cell color comes from the theme's heat() ramp.
  */
 
 import { useState } from "react";
 import type { HeatCell } from "#/lib/analytics";
 import { formatTokens, WEEKDAY_LABELS } from "#/lib/format";
+import { useChartTokens } from "#/lib/theme";
 
 const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0]; // Monday first
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
 
 export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
+	const tokens = useChartTokens();
 	const [hover, setHover] = useState<HeatCell | null>(null);
 	const max = Math.max(...cells.map((c) => c.tokens), 1);
 	const at = (w: number, h: number) => cells[w * 24 + h];
@@ -24,7 +27,8 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 					{HOURS.map((h) => (
 						<span
 							key={h}
-							className="num text-center text-[9.5px] text-slate-600"
+							className="num text-center text-[9.5px]"
+							style={{ color: "var(--ink-3)" }}
 						>
 							{h % 3 === 0 ? h : ""}
 						</span>
@@ -39,7 +43,10 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 						className="grid items-center"
 						style={{ gridTemplateColumns: "38px 1fr" }}
 					>
-						<span className="pr-2 text-right text-[11px] text-slate-500">
+						<span
+							className="pr-2 text-right text-[11px]"
+							style={{ color: "var(--ink-2)" }}
+						>
 							{WEEKDAY_LABELS[w]}
 						</span>
 						<div className="grid grid-cols-24 gap-[3px]">
@@ -50,14 +57,11 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 									// biome-ignore lint/a11y/noStaticElementInteractions: hover is a visual enhancement; the readout bar below mirrors the same info
 									<div
 										key={`${w}-${h}`}
-										className="fade-in aspect-square w-full cursor-pointer rounded-[3px] transition-transform hover:scale-125 hover:z-10"
+										className="fade-in aspect-square w-full cursor-pointer transition-transform hover:scale-125 hover:z-10"
 										style={
 											{
-												background: `rgba(103,232,249,${0.05 + intensity * 0.85})`,
-												boxShadow:
-													intensity > 0.7
-														? "0 0 8px rgba(103,232,249,0.5)"
-														: undefined,
+												background: tokens.heat(intensity),
+												borderRadius: "calc(var(--radius) - 1px)",
 												"--d": `${rowIdx * 45 + h * 8}ms`,
 											} as React.CSSProperties
 										}
@@ -72,14 +76,17 @@ export function UsageHeatmap({ cells }: { cells: HeatCell[] }) {
 			</div>
 
 			{/* Readout bar */}
-			<div className="num mt-3 flex h-5 items-center justify-between text-[11.5px] text-slate-500">
+			<div
+				className="num mt-3 flex h-5 items-center justify-between text-[11.5px]"
+				style={{ color: "var(--ink-3)" }}
+			>
 				{hover ? (
 					<>
 						<span>
 							{WEEKDAY_LABELS[hover.weekday]}{" "}
 							{String(hover.hour).padStart(2, "0")}:00 · {hover.count} requests
 						</span>
-						<span className="text-cyan-300">
+						<span style={{ color: "var(--accent)" }}>
 							{formatTokens(hover.tokens)} tokens
 						</span>
 					</>

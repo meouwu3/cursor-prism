@@ -1,35 +1,40 @@
 /**
  * Token composition: overall and per-model stacked bars of
  * "cache reads / fresh input / output" — the cache story at a glance.
+ * Flat segments from the theme palette; no gradients, no glow.
  */
 
 import type { ModelStat } from "#/lib/analytics";
 import { paletteAt } from "#/lib/colors";
 import { formatPct, formatTokens } from "#/lib/format";
+import { useChartTokens } from "#/lib/theme";
 
 const PARTS = [
-	{ key: "cacheRead", label: "Cache reads", color: "#67e8f9" },
-	{ key: "input", label: "Fresh input", color: "#c4b5fd" },
-	{ key: "output", label: "Output", color: "#f0abfc" },
+	{ key: "cacheRead", label: "Cache reads" },
+	{ key: "input", label: "Fresh input" },
+	{ key: "output", label: "Output" },
 ] as const;
 
 function Bar({
 	parts,
 	height = 22,
 	delay = 0,
+	track,
 }: {
 	parts: { value: number; color: string }[];
 	height?: number;
 	delay?: number;
+	track: string;
 }) {
 	const total = parts.reduce((a, p) => a + p.value, 0) || 1;
 	let left = 0;
 	return (
 		<div
-			className="relative w-full overflow-hidden rounded-full bg-white/[0.04]"
+			className="relative w-full overflow-hidden"
 			style={{
 				height,
-				boxShadow: "inset 0 0 0 1px rgba(148,163,255,0.08)",
+				background: track,
+				borderRadius: "var(--radius)",
 			}}
 		>
 			{parts.map((p) => {
@@ -42,8 +47,7 @@ function Bar({
 							{
 								left: `${left}%`,
 								width: `${width}%`,
-								background: `linear-gradient(180deg, ${p.color}dd, ${p.color}99)`,
-								boxShadow: `0 0 12px ${p.color}44`,
+								background: p.color,
 								"--d": `${delay}ms`,
 							} as React.CSSProperties
 						}
@@ -63,23 +67,29 @@ export function CompositionBars({
 	stats: ModelStat[];
 	overall: { cacheRead: number; input: number; output: number };
 }) {
+	const tokens = useChartTokens();
+	const partColors = [tokens.palette[1], tokens.palette[0], tokens.palette[2]];
 	const totalAll = overall.cacheRead + overall.input + overall.output || 1;
 
 	return (
 		<div className="space-y-5">
 			{/* Legend */}
 			<div className="flex flex-wrap gap-x-5 gap-y-1.5">
-				{PARTS.map((p) => (
+				{PARTS.map((p, i) => (
 					<span
 						key={p.key}
-						className="flex items-center gap-1.5 text-[12px] text-slate-400"
+						className="flex items-center gap-1.5 text-[12px]"
+						style={{ color: "var(--ink-2)" }}
 					>
 						<span
-							className="h-2 w-2 rounded-full"
-							style={{ background: p.color, boxShadow: `0 0 6px ${p.color}` }}
+							className="h-2 w-2"
+							style={{
+								background: partColors[i],
+								borderRadius: "calc(var(--radius) - 1px)",
+							}}
 						/>
 						{p.label}
-						<span className="num text-slate-500">
+						<span className="num" style={{ color: "var(--ink-3)" }}>
 							{formatPct(
 								(p.key === "cacheRead"
 									? overall.cacheRead
@@ -95,19 +105,23 @@ export function CompositionBars({
 			{/* Overall composition */}
 			<div>
 				<div className="mb-2 flex items-baseline justify-between">
-					<span className="text-[13px] font-medium text-white/90">
+					<span
+						className="text-[13px] font-medium"
+						style={{ color: "var(--ink)" }}
+					>
 						All requests
 					</span>
-					<span className="num text-[12px] text-slate-500">
+					<span className="num text-[12px]" style={{ color: "var(--ink-3)" }}>
 						{formatTokens(totalAll)}
 					</span>
 				</div>
 				<Bar
-					height={26}
+					height={24}
+					track={tokens.grid}
 					parts={[
-						{ value: overall.cacheRead, color: PARTS[0].color },
-						{ value: overall.input, color: PARTS[1].color },
-						{ value: overall.output, color: PARTS[2].color },
+						{ value: overall.cacheRead, color: partColors[0] },
+						{ value: overall.input, color: partColors[1] },
+						{ value: overall.output, color: partColors[2] },
 					]}
 				/>
 			</div>
@@ -117,14 +131,23 @@ export function CompositionBars({
 				{stats.map((s, i) => (
 					<div key={s.model}>
 						<div className="mb-1.5 flex items-baseline justify-between gap-3">
-							<span className="flex min-w-0 items-center gap-2 text-[12.5px] text-slate-300">
+							<span
+								className="flex min-w-0 items-center gap-2 text-[12.5px]"
+								style={{ color: "var(--ink)" }}
+							>
 								<span
-									className="h-2 w-2 shrink-0 rounded-[3px]"
-									style={{ background: paletteAt(i) }}
+									className="h-2 w-2 shrink-0"
+									style={{
+										background: paletteAt(i, tokens.palette),
+										borderRadius: "calc(var(--radius) - 1px)",
+									}}
 								/>
 								<span className="truncate">{s.model}</span>
 							</span>
-							<span className="num shrink-0 text-[11.5px] text-slate-500">
+							<span
+								className="num shrink-0 text-[11.5px]"
+								style={{ color: "var(--ink-3)" }}
+							>
 								cache{" "}
 								{formatPct(
 									s.cacheRead / (s.cacheRead + s.input + s.output || 1),
@@ -133,12 +156,13 @@ export function CompositionBars({
 							</span>
 						</div>
 						<Bar
-							height={13}
+							height={12}
 							delay={i * 90}
+							track={tokens.grid}
 							parts={[
-								{ value: s.cacheRead, color: PARTS[0].color },
-								{ value: s.input, color: PARTS[1].color },
-								{ value: s.output, color: PARTS[2].color },
+								{ value: s.cacheRead, color: partColors[0] },
+								{ value: s.input, color: partColors[1] },
+								{ value: s.output, color: partColors[2] },
 							]}
 						/>
 					</div>

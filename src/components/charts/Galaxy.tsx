@@ -1,14 +1,17 @@
 /**
  * Token Galaxy: a hand-rolled 3D perspective-projected particle cloud.
  * Each particle is one request — x: time, y: log(token volume),
- * z: model dimension. Rendered with Canvas 2D and pre-baked glow
- * sprites; drag to rotate, hover to inspect. Zero dependencies.
+ * z: model dimension. Rendered with Canvas 2D and pre-baked sprites;
+ * drag to rotate, hover to inspect. Zero dependencies.
+ * Sprite style follows the theme: crisp dots on paper, soft glow
+ * on dark and blueprint.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { paletteAt } from "#/lib/colors";
 import type { UsageRow } from "#/lib/csv";
 import { formatCost, formatDateTime, formatTokens } from "#/lib/format";
+import { useChartTokens, useTheme } from "#/lib/theme";
 import { useContainerSize, useMounted } from "../ui";
 
 interface Particle {
@@ -20,7 +23,7 @@ interface Particle {
 	row: UsageRow;
 }
 
-function makeSprite(color: string): HTMLCanvasElement | null {
+function makeSprite(color: string, soft: boolean): HTMLCanvasElement | null {
 	const s = 64;
 	const c = document.createElement("canvas");
 	c.width = s;
@@ -28,15 +31,27 @@ function makeSprite(color: string): HTMLCanvasElement | null {
 	const ctx = c.getContext("2d");
 	if (!ctx) return null;
 	const g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-	g.addColorStop(0, "rgba(255,255,255,0.95)");
-	g.addColorStop(0.25, color);
-	g.addColorStop(1, "transparent");
+	if (soft) {
+		// Glow: bright core dissolving outward
+		g.addColorStop(0, "rgba(255,255,255,0.9)");
+		g.addColorStop(0.3, color);
+		g.addColorStop(1, "transparent");
+	} else {
+		// Crisp dot with a hard edge — printed-ink feel
+		g.addColorStop(0, color);
+		g.addColorStop(0.45, color);
+		g.addColorStop(0.52, "transparent");
+		g.addColorStop(1, "transparent");
+	}
 	ctx.fillStyle = g;
 	ctx.fillRect(0, 0, s, s);
 	return c;
 }
 
 export function Galaxy({ rows }: { rows: UsageRow[] }) {
+	const tokens = useChartTokens();
+	const { theme } = useTheme();
+	const soft = theme !== "print";
 	const [wrapRef, { width, height }] = useContainerSize<HTMLDivElement>();
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const mounted = useMounted();
@@ -66,11 +81,11 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 					? (models.indexOf(r.model) / (models.length - 1)) * 2 - 1
 					: 0,
 			size: 4 + 14 * Math.sqrt(r.totalTokens / maxT),
-			color: paletteAt(models.indexOf(r.model)),
+			color: paletteAt(models.indexOf(r.model), tokens.palette),
 			row: r,
 		}));
 		return { particles, models };
-	}, [rows]);
+	}, [rows, tokens.palette]);
 
 	useEffect(() => {
 		if (!mounted || width < 60 || height < 60) return;
@@ -84,8 +99,8 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 
 		const sprites = new Map<string, HTMLCanvasElement>();
 		for (const m of models) {
-			const color = paletteAt(models.indexOf(m));
-			const sprite = makeSprite(color);
+			const color = paletteAt(models.indexOf(m), tokens.palette);
+			const sprite = makeSprite(color, soft);
 			if (sprite) sprites.set(color, sprite);
 		}
 
@@ -120,6 +135,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 
 			// ---- Floor grid ----
 			ctx.lineWidth = 1;
+			ctx.strokeStyle = tokens.grid;
 			const gridLines: [number, number, number, number, number, number][] = [];
 			for (let i = -4; i <= 4; i++) {
 				const t = i / 4;
@@ -129,8 +145,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 			for (const [x1, y1, z1, x2, y2, z2] of gridLines) {
 				const a = project({ x: x1, y: y1, z: z1 });
 				const b = project({ x: x2, y: y2, z: z2 });
-				const alpha = 0.05 + 0.06 * Math.min(a.persp, b.persp);
-				ctx.strokeStyle = `rgba(148,163,255,${alpha})`;
+				ctx.globalAlpha = 0.55 + 0.45 * Math.min(a.persp, b.persp);
 				ctx.beginPath();
 				ctx.moveTo(a.sx, a.sy);
 				ctx.lineTo(b.sx, b.sy);
@@ -170,7 +185,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 				ctx.beginPath();
 				ctx.arc(x, y, 10, 0, Math.PI * 2);
 				ctx.stroke();
-				// Light beam down to the floor
+				// Reference line down to the floor
 				const floor = project({ x: p.x, y: 0, z: p.z });
 				ctx.strokeStyle = `${color}55`;
 				ctx.setLineDash([3, 4]);
@@ -192,7 +207,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 		};
 		raf = requestAnimationFrame(frame);
 		return () => cancelAnimationFrame(raf);
-	}, [mounted, width, height, particles, models]);
+	}, [mounted, width, height, particles, models, tokens, soft]);
 
 	const onPointerDown = (e: React.PointerEvent) => {
 		drag.current = { active: true, lastX: e.clientX, lastY: e.clientY };
@@ -223,7 +238,8 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 	return (
 		<div
 			ref={wrapRef}
-			className="relative h-full w-full cursor-grab touch-none overflow-hidden rounded-[18px] active:cursor-grabbing"
+			className="relative h-full w-full cursor-grab touch-none overflow-hidden active:cursor-grabbing"
+			style={{ borderRadius: "var(--radius)" }}
 			onPointerDown={onPointerDown}
 			onPointerMove={onPointerMove}
 			onPointerUp={onPointerUp}
@@ -238,14 +254,15 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 				{models.map((m, i) => (
 					<span
 						key={m}
-						className="flex items-center gap-1.5 text-[11px] text-slate-400"
+						className="flex items-center gap-1.5 text-[11px]"
+						style={{ color: "var(--ink-2)" }}
 					>
 						{m}
 						<span
-							className="h-2 w-2 rounded-full"
+							className="h-2 w-2"
 							style={{
-								background: paletteAt(i),
-								boxShadow: `0 0 6px ${paletteAt(i)}`,
+								background: paletteAt(i, tokens.palette),
+								borderRadius: "calc(var(--radius) - 1px)",
 							}}
 						/>
 					</span>
@@ -253,7 +270,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 			</div>
 
 			{/* Interaction hint */}
-			<div className="num pointer-events-none absolute bottom-3 left-4 text-[10.5px] uppercase tracking-[0.25em] text-slate-600">
+			<div className="kicker pointer-events-none absolute bottom-3 left-4">
 				drag to rotate · hover to inspect
 			</div>
 
@@ -266,7 +283,7 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 						top: Math.max(tip.y - 90, 8),
 					}}
 				>
-					<div className="num text-[11px] text-slate-400">
+					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
 						{formatDateTime(tip.row.date)}
 					</div>
 					<div
@@ -274,9 +291,14 @@ export function Galaxy({ rows }: { rows: UsageRow[] }) {
 						style={{ color: tip.color }}
 					>
 						{formatTokens(tip.row.totalTokens)}
-						<span className="ml-1.5 font-normal text-slate-500">tokens</span>
+						<span
+							className="ml-1.5 font-normal"
+							style={{ color: "var(--ink-3)" }}
+						>
+							tokens
+						</span>
 					</div>
-					<div className="num text-[11px] text-slate-500">
+					<div className="num text-[11px]" style={{ color: "var(--ink-3)" }}>
 						{tip.row.model} · {formatCost(tip.row.cost)}
 					</div>
 				</div>
