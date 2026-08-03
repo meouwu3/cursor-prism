@@ -1,6 +1,5 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { THEME_BOOTSTRAP, ThemeProvider } from "#/lib/theme";
 
 import appCss from "../styles.css?url";
 
@@ -44,7 +43,7 @@ export const Route = createRootRoute({
 			},
 			{
 				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap",
+				href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap",
 			},
 		],
 	}),
@@ -53,23 +52,19 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		// data-theme is set pre-paint by the bootstrap script and may differ
+		// from the SSR default ("print") — that divergence is intentional.
+		<html lang="en" data-theme="print" suppressHydrationWarning>
 			<head>
+				{/* Restore the saved theme before first paint */}
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: static bootstrap string, no user input
+					dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }}
+				/>
 				<HeadContent />
 			</head>
 			<body>
-				{children}
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-					]}
-				/>
+				<ThemeProvider>{children}</ThemeProvider>
 				<Scripts />
 			</body>
 		</html>
