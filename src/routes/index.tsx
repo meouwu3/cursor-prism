@@ -1,16 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Logo } from "#/components/Logo";
 import { ThemeSwitcher } from "#/components/ThemeSwitcher";
 import { UploadZone } from "#/components/UploadZone";
 import { CsvParseError } from "#/lib/csv";
-import {
-	clearUsageData,
-	hydrateUsageData,
-	setDemoData,
-	setUsageCsv,
-	useUsageData,
-} from "#/lib/store";
+import { setUsageCsv } from "#/lib/store";
 
 export const Route = createFileRoute("/")({ component: Landing });
 
@@ -61,12 +55,7 @@ const STEPS = [
 
 function Landing() {
 	const navigate = useNavigate();
-	const data = useUsageData();
 	const [error, setError] = useState<string | null>(null);
-
-	useEffect(() => {
-		hydrateUsageData();
-	}, []);
 
 	const onFile = (file: File) => {
 		setError(null);
@@ -85,11 +74,6 @@ function Landing() {
 				}
 			})
 			.catch(() => setError("Failed to read the file. Please try again."));
-	};
-
-	const onDemo = () => {
-		setDemoData();
-		navigate({ to: "/dashboard" });
 	};
 
 	return (
@@ -143,30 +127,6 @@ function Landing() {
 					style={{ "--d": "240ms" } as React.CSSProperties}
 				>
 					<UploadZone onFile={onFile} error={error} />
-					<div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
-						<button type="button" onClick={onDemo} className="btn btn-solid">
-							No CSV handy? Load demo data
-						</button>
-						{data.status === "ready" && !data.isDemo ? (
-							<button
-								type="button"
-								onClick={() => navigate({ to: "/dashboard" })}
-								className="btn"
-							>
-								Resume — {data.fileName}
-							</button>
-						) : null}
-						{data.status === "ready" ? (
-							<button
-								type="button"
-								onClick={clearUsageData}
-								className="num cursor-pointer border-none bg-transparent px-3 py-2 text-[12px]"
-								style={{ color: "var(--ink-3)" }}
-							>
-								Clear local data
-							</button>
-						) : null}
-					</div>
 					<p
 						className="fade-in mt-4 text-center text-[12px]"
 						style={
@@ -174,7 +134,7 @@ function Landing() {
 						}
 					>
 						Local-first — parsed entirely in your browser, nothing is ever
-						uploaded
+						uploaded or stored
 					</p>
 				</section>
 
@@ -250,8 +210,8 @@ function Landing() {
 					}
 				>
 					<p>
-						Cursor Prism — built with TanStack Start . Your data never leaves
-						the browser
+						Cursor Prism — built with TanStack Start. Your data never leaves the
+						browser.
 					</p>
 				</footer>
 			</div>

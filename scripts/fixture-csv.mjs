@@ -1,19 +1,17 @@
 /**
- * Demo data generator: synthesizes realistic-looking usage rows with a
- * seeded PRNG, so visitors can explore the full dashboard without
- * exporting anything.
+ * Fixture CSV generator for the screenshot/smoke harness.
  *
- * The synthesis deliberately keeps a few traits of real Cursor usage:
- * - cache reads dominate (the typical shape of real usage)
+ * Synthesizes realistic-looking Cursor usage rows with a seeded PRNG
+ * (reproducible) and serializes them in the exact Cursor dashboard
+ * export format. The synthesis deliberately keeps a few traits of real
+ * usage:
+ * - cache reads dominate (the typical shape of real exports)
  * - weekdays busier than weekends, with hourly peaks during the day
- * - occasional giant requests (long sessions / huge context) that
- *   concentrate the spend
+ * - occasional giant requests that concentrate the spend
  */
 
-import type { UsageRow } from "./csv";
-
-/** mulberry32 seeded PRNG — demo data is reproducible. */
-function mulberry32(seed: number): () => number {
+/** mulberry32 seeded PRNG — fixture data is reproducible. */
+function mulberry32(seed) {
 	let a = seed >>> 0;
 	return () => {
 		a |= 0;
@@ -24,41 +22,12 @@ function mulberry32(seed: number): () => number {
 	};
 }
 
-interface ModelProfile {
-	model: string;
-	weight: number;
-	/** Rough cost per million tokens */
-	pricePerMillion: number;
-	/** Typical share of cache reads within input */
-	cacheRatio: number;
-}
-
-const MODELS: ModelProfile[] = [
-	{
-		model: "cursor-grok-4.5-medium",
-		weight: 0.42,
-		pricePerMillion: 0.55,
-		cacheRatio: 0.86,
-	},
-	{
-		model: "composer-2.5",
-		weight: 0.22,
-		pricePerMillion: 0.24,
-		cacheRatio: 0.8,
-	},
-	{
-		model: "claude-4.5-sonnet",
-		weight: 0.18,
-		pricePerMillion: 3.1,
-		cacheRatio: 0.88,
-	},
+const MODELS = [
+	{ model: "cursor-grok-4.5-medium", weight: 0.42, pricePerMillion: 0.55, cacheRatio: 0.86 },
+	{ model: "composer-2.5", weight: 0.22, pricePerMillion: 0.24, cacheRatio: 0.8 },
+	{ model: "claude-4.5-sonnet", weight: 0.18, pricePerMillion: 3.1, cacheRatio: 0.88 },
 	{ model: "gpt-5.2", weight: 0.12, pricePerMillion: 1.9, cacheRatio: 0.82 },
-	{
-		model: "gemini-3-pro",
-		weight: 0.06,
-		pricePerMillion: 1.4,
-		cacheRatio: 0.78,
-	},
+	{ model: "gemini-3-pro", weight: 0.06, pricePerMillion: 1.4, cacheRatio: 0.78 },
 ];
 
 const KINDS = [
@@ -68,7 +37,7 @@ const KINDS = [
 	{ kind: "cmdk", weight: 0.05 },
 ];
 
-function pick<T>(rand: () => number, items: (T & { weight: number })[]): T {
+function pick(rand, items) {
 	let r = rand();
 	for (const it of items) {
 		r -= it.weight;
@@ -78,15 +47,18 @@ function pick<T>(rand: () => number, items: (T & { weight: number })[]): T {
 }
 
 /** Log-normal-ish magnitude with occasional giant bursts. */
-function tokenMagnitude(rand: () => number): number {
+function tokenMagnitude(rand) {
 	const base = Math.exp(rand() * 4.2 + 10.2); // ~ 27K .. 1.8M
 	const burst = rand() < 0.06 ? 3 + rand() * 6 : 1;
 	return base * burst;
 }
 
-export function generateDemoRows(days = 75, seed = 20260730): UsageRow[] {
+const HEADER =
+	"Date,Kind,Model,Max Mode,Input (w/ Cache Write),Input (w/o Cache Write),Cache Read,Output Tokens,Total Tokens,Cost";
+
+export function generateFixtureCsv(days = 75, seed = 20260730) {
 	const rand = mulberry32(seed);
-	const rows: UsageRow[] = [];
+	const lines = [HEADER];
 	const now = new Date();
 	now.setMinutes(0, 0, 0);
 
@@ -122,28 +94,33 @@ export function generateDemoRows(days = 75, seed = 20260730): UsageRow[] {
 			);
 			const fresh = inputTotal - cacheRead;
 			const inputWithCacheWrite = rand() < 0.12 ? Math.round(fresh * 0.3) : 0;
+			const cost = (
+				Math.round(
+					((total / 1_000_000) * m.pricePerMillion + Number.EPSILON) * 100,
+				) / 100
+			).toFixed(2);
 
 			const date = new Date(day);
 			date.setHours(hour, Math.floor(rand() * 60), Math.floor(rand() * 60), 0);
 
-			rows.push({
-				date,
-				kind: k.kind,
-				model: m.model,
-				maxMode: rand() < 0.08,
-				inputWithCacheWrite,
-				inputWithoutCacheWrite: fresh - inputWithCacheWrite,
-				cacheRead,
-				outputTokens: output,
-				totalTokens: total,
-				cost:
-					Math.round(
-						((total / 1_000_000) * m.pricePerMillion + Number.EPSILON) * 100,
-					) / 100,
-			});
+			lines.push(
+				[
+					date.toISOString(),
+					k.kind,
+					m.model,
+					rand() < 0.08 ? "Yes" : "No",
+					inputWithCacheWrite,
+					fresh - inputWithCacheWrite,
+					cacheRead,
+					output,
+					total,
+					cost,
+				]
+					.map((v) => `"${v}"`)
+					.join(","),
+			);
 		}
 	}
 
-	rows.sort((a, b) => a.date.getTime() - b.date.getTime());
-	return rows;
+	return `${lines.join("\n")}\n`;
 }

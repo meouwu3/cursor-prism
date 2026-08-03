@@ -6,9 +6,9 @@
  * per theme (print / dark / blueprint):
  *
  *   1. landing page
- *   2. dashboard with synthesized demo data
+ *   2. dashboard with a synthesized fixture CSV (scripts/fixture-csv.mjs)
  *   3. dashboard with a real Cursor CSV export (print theme)
- *   4. reload persistence via sessionStorage
+ *   4. reload drops in-memory data → back to the landing page
  *
  * Usage:
  *   pnpm dev            # in one terminal
@@ -19,13 +19,19 @@
  */
 
 import { existsSync } from "node:fs";
+import { writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { homedir } from "node:os";
 import { chromium } from "playwright-core";
+import { generateFixtureCsv } from "./fixture-csv.mjs";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const REAL_CSV = process.env.REAL_CSV ?? `${homedir()}/downloads/2026-07-30.csv`;
 const OUT = new URL("../docs/screenshots/", import.meta.url).pathname;
 const THEMES = ["print", "dark", "blueprint"];
+const FIXTURE = `${tmpdir()}/cursor-prism-fixture.csv`;
+
+writeFileSync(FIXTURE, generateFixtureCsv());
 
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const problems = [];
@@ -54,7 +60,7 @@ async function newPage(theme) {
 	return page;
 }
 
-// ---- 1 + 2. Landing and demo dashboard, once per theme ----
+// ---- 1 + 2. Landing and fixture dashboard, once per theme ----
 for (const theme of THEMES) {
 	const page = await newPage(theme);
 	await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
@@ -62,11 +68,11 @@ for (const theme of THEMES) {
 	await page.screenshot({ path: `${OUT}${theme}-landing.png` });
 	console.log(`✓ ${theme} landing`);
 
-	await page.getByText("Load demo data").click();
+	await page.locator("input[type=file]").first().setInputFiles(FIXTURE);
 	await page.waitForURL("**/dashboard", { timeout: 8000 });
 	await page.waitForTimeout(2800); // entrance animations + galaxy spin-up
 	await page.screenshot({ path: `${OUT}${theme}-dashboard.png`, fullPage: true });
-	console.log(`✓ ${theme} demo dashboard`);
+	console.log(`✓ ${theme} fixture dashboard`);
 	await page.screenshot({ path: `${OUT}${theme}-galaxy.png` }); // viewport only
 	await page.close();
 }
@@ -82,13 +88,13 @@ if (existsSync(REAL_CSV)) {
 	await page.screenshot({ path: `${OUT}dashboard-real.png`, fullPage: true });
 	console.log("✓ real csv dashboard");
 
-	// ---- 4. Reload persistence ----
+	// ---- 4. Reload drops in-memory data → redirect to landing ----
 	await page.reload({ waitUntil: "networkidle" });
 	await page.waitForTimeout(1500);
-	if (!page.url().includes("/dashboard")) {
-		problems.push("reload lost the session — redirected away from /dashboard");
+	if (new URL(page.url()).pathname !== "/") {
+		problems.push("reload kept the session — expected a redirect to /");
 	} else {
-		console.log("✓ reload persistence");
+		console.log("✓ reload returns to landing (in-memory only)");
 	}
 	await page.close();
 } else {

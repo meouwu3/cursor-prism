@@ -27,12 +27,7 @@ import {
 	formatDay,
 	formatTokens,
 } from "#/lib/format";
-import {
-	clearUsageData,
-	hydrateUsageData,
-	setUsageCsv,
-	useUsageData,
-} from "#/lib/store";
+import { setUsageCsv, useUsageData } from "#/lib/store";
 import { useChartTokens } from "#/lib/theme";
 
 export const Route = createFileRoute("/dashboard")({ component: Dashboard });
@@ -45,10 +40,7 @@ function Dashboard() {
 	const fileInput = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		hydrateUsageData();
-	}, []);
-
-	useEffect(() => {
+		// Nothing in memory (direct visit / reload) — back to the upload page
 		if (data.status === "empty") navigate({ to: "/" });
 	}, [data.status, navigate]);
 
@@ -85,7 +77,6 @@ function Dashboard() {
 	};
 
 	if (data.status !== "ready" || !rows || !analytics) {
-		// Skeleton while the session is being restored
 		return (
 			<div className="relative flex min-h-screen items-center justify-center">
 				<div className="kicker animate-pulse">loading spectrum…</div>
@@ -112,17 +103,8 @@ function Dashboard() {
 
 					<div className="flex flex-wrap items-center gap-2">
 						<span className="chip">
-							{data.isDemo ? (
-								<>
-									demo data — {formatDay(summary.rangeStart)} ~{" "}
-									{formatDay(summary.rangeEnd)}
-								</>
-							) : (
-								<>
-									{data.fileName} — {formatDay(summary.rangeStart)} ~{" "}
-									{formatDay(summary.rangeEnd)}
-								</>
-							)}
+							{data.fileName} — {formatDay(summary.rangeStart)} ~{" "}
+							{formatDay(summary.rangeEnd)}
 						</span>
 						<button
 							type="button"
@@ -130,16 +112,6 @@ function Dashboard() {
 							className="btn"
 						>
 							Change CSV
-						</button>
-						<button
-							type="button"
-							onClick={() => {
-								clearUsageData();
-								navigate({ to: "/" });
-							}}
-							className="btn"
-						>
-							Clear
 						</button>
 						<ThemeSwitcher />
 						<input
@@ -337,8 +309,8 @@ function Dashboard() {
 					className="rule-t mt-14 pt-5 text-center text-[12px]"
 					style={{ color: "var(--ink-3)" }}
 				>
-					Cursor Prism — data lives only in your browser — built with TanStack
-					Start
+					Cursor Prism — data lives only in browser memory. Built with TanStack
+					Start.
 				</footer>
 			</div>
 		</div>
