@@ -17,13 +17,12 @@ One semantic token system, two complete looks. Switch from the top bar — the c
 | Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
 | ![Print](docs/screenshots/print-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
 
-## Four lenses
+## Three lenses
 
 | Lens | What it shows |
 | --- | --- |
 | Trend Prism | Daily token & cost area charts with a 7-day moving-average reference |
-| Model Spectrum | Per-model share donut and composition — which model does the heavy lifting |
-| Cache Economics | Cache reads vs fresh input vs output — quantify your context reuse |
+| Model Spectrum | Per-model share donut fused with cache/fresh-input/output composition |
 | Token Galaxy | A hand-rolled, dependency-free 3D particle cloud. Every request is a star — drag to rotate, hover to inspect |
 
 ## Quick start
@@ -37,7 +36,7 @@ Then:
 
 1. **Export** — open [cursor.com/dashboard](https://cursor.com/dashboard) → Usage → **Export CSV**
 2. **Drop** — drag the CSV onto the landing page (or click to browse)
-3. **Explore** — four lenses on where your tokens actually go
+3. **Explore** — three lenses on where your tokens actually go
 
 ## Tech stack
 
@@ -59,8 +58,8 @@ src/
 │   ├── format.ts           #   Number / timestamp formatting
 │   └── store.ts            #   Global in-memory store (no persistence)
 ├── components/
-│   ├── charts/             # Hand-rolled visuals: TimelineChart / ModelDonut /
-│   │                       #   CompositionBars / Galaxy (3D)
+│   ├── charts/             # Hand-rolled visuals: TimelineChart /
+│   │                       #   ModelSpectrum / Galaxy (3D)
 │   ├── KpiRow.tsx          # KPI strip with rolling numbers
 │   ├── TaglineReveal.tsx   # Word-by-word scroll reveal on the landing page
 │   ├── NotFound.tsx        # Branded 404

@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CompositionBars } from "#/components/charts/CompositionBars";
 import { Galaxy } from "#/components/charts/Galaxy";
-import { ModelDonut } from "#/components/charts/ModelDonut";
+import { ModelSpectrum } from "#/components/charts/ModelSpectrum";
 import { TimelineChart } from "#/components/charts/TimelineChart";
 import { KpiRow } from "#/components/KpiRow";
 import { Logo } from "#/components/Logo";
@@ -197,8 +196,8 @@ function Dashboard() {
 					</Card>
 				</section>
 
-				{/* Model spectrum + composition */}
-				<section className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+				{/* Model spectrum: share fused with composition */}
+				<section className="mt-6">
 					<Card
 						className="rise px-5 py-4"
 						style={{ "--d": "340ms" } as React.CSSProperties}
@@ -206,20 +205,9 @@ function Dashboard() {
 						<SectionTitle
 							eyebrow="model spectrum"
 							title="Model spectrum"
-							desc="Which models burn your tokens"
+							desc="Which models burn your tokens — and how much the cache absorbs"
 						/>
-						<ModelDonut stats={analytics.models} />
-					</Card>
-					<Card
-						className="rise px-5 py-4"
-						style={{ "--d": "400ms" } as React.CSSProperties}
-					>
-						<SectionTitle
-							eyebrow="cache economics"
-							title="Cache economics"
-							desc="Cache reads vs fresh input vs output"
-						/>
-						<CompositionBars
+						<ModelSpectrum
 							stats={analytics.models}
 							overall={{
 								cacheRead: summary.cacheRead,

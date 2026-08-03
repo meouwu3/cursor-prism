@@ -30,7 +30,7 @@ const STEPS = [
 	{
 		n: "03",
 		title: "Explore",
-		desc: "Four lenses on where your tokens actually go",
+		desc: "Three lenses on where your tokens actually go",
 	},
 ];
 
@@ -41,11 +41,7 @@ const FEATURES = [
 	},
 	{
 		title: "Model spectrum",
-		desc: "Per model share and composition. See exactly which model does the heavy lifting.",
-	},
-	{
-		title: "Cache economics",
-		desc: "Cache reads versus fresh input versus output. Quantify how hard context reuse works for you.",
+		desc: "Per model share fused with cache composition. See which model does the heavy lifting, and how hard the cache works.",
 	},
 	{
 		title: "Token galaxy",
@@ -215,7 +211,7 @@ function Landing() {
 					>
 						<div className="kicker">The index</div>
 						<h2 className="display mt-1 text-2xl font-semibold">
-							Four lenses on your usage
+							Three lenses on your usage
 						</h2>
 					</div>
 					<div className="grid gap-x-16 sm:grid-cols-2">
