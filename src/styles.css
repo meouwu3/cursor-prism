@@ -175,14 +175,16 @@ body::before {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
-/* Blueprint: graph paper */
+/* Blueprint: graph paper + faint film grain to break digital flatness */
 [data-theme="blueprint"] body::before {
 	background-image:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
 		linear-gradient(rgba(234, 241, 255, 0.055) 1px, transparent 1px),
 		linear-gradient(90deg, rgba(234, 241, 255, 0.055) 1px, transparent 1px),
 		linear-gradient(rgba(234, 241, 255, 0.09) 1px, transparent 1px),
 		linear-gradient(90deg, rgba(234, 241, 255, 0.09) 1px, transparent 1px);
 	background-size:
+		120px 120px,
 		28px 28px,
 		28px 28px,
 		140px 140px,
@@ -257,6 +259,8 @@ p {
 }
 [data-theme="blueprint"] .panel {
 	background: rgba(234, 241, 255, 0.04);
+	/* Tinted shadow carrying the background hue, not pure black */
+	box-shadow: 0 16px 40px -16px rgba(4, 16, 40, 0.45);
 }
 [data-theme="blueprint"] .panel::before,
 [data-theme="blueprint"] .panel::after {
@@ -277,6 +281,38 @@ p {
 	right: -1px;
 	border-bottom: 1px solid var(--line-strong);
 	border-right: 1px solid var(--line-strong);
+}
+
+/* Spotlight border: the hairline illuminates under the cursor.
+   Blueprint only — ruled paper stays matte. */
+.panel-spot {
+	display: none;
+}
+[data-theme="blueprint"] .panel-spot {
+	display: block;
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	pointer-events: none;
+	background: radial-gradient(
+		150px circle at var(--mx, 50%) var(--my, 50%),
+		color-mix(in srgb, var(--accent) 60%, transparent),
+		transparent 70%
+	);
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	mask-composite: exclude;
+	opacity: 0;
+	transition: opacity 0.45s var(--ease);
+}
+[data-theme="blueprint"] .panel:hover .panel-spot {
+	opacity: 1;
 }
 
 /* Buttons: sentence case, semibold, 8px/12px padding */
