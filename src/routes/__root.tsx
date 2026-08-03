@@ -21,6 +21,27 @@ export const Route = createRootRoute({
 				content:
 					"Refract your Cursor usage CSV into a spectrum: trends, models, cache economics and a 3D token galaxy — parsed 100% locally in your browser.",
 			},
+			{
+				property: "og:title",
+				content: "Cursor Prism — Token Observatory",
+			},
+			{
+				property: "og:description",
+				content:
+					"Refract your Cursor usage CSV into a spectrum: trends, models, cache economics and a 3D token galaxy — parsed 100% locally in your browser.",
+			},
+			{
+				property: "og:type",
+				content: "website",
+			},
+			{
+				property: "og:image",
+				content: "/og.png",
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image",
+			},
 		],
 		links: [
 			{
@@ -64,7 +85,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<ThemeProvider>{children}</ThemeProvider>
+				<a href="#main" className="skip-link">
+					Skip to content
+				</a>
+				<ThemeProvider>
+					<main id="main">{children}</main>
+				</ThemeProvider>
 				<Scripts />
 			</body>
 		</html>
