@@ -14,14 +14,14 @@ export function Logo({ size = 34 }: { size?: number }) {
 			fill="none"
 			role="img"
 			aria-label="Cursor Prism"
-			style={{ color: "var(--ink)" }}
+			className="text-ink"
 		>
 			<title>Cursor Prism</title>
 			{/* Incoming beam */}
 			<path
 				d="M2 20 L18 24"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "0ms", "--dd": "450ms" } as React.CSSProperties}
 				stroke="currentColor"
 				strokeWidth="1.6"
@@ -32,7 +32,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M24 8 L36 36 L12 36 Z"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "250ms", "--dd": "1000ms" } as React.CSSProperties}
 				fill="none"
 				stroke="currentColor"
@@ -43,7 +43,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M20 22 L28 26"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "1000ms", "--dd": "350ms" } as React.CSSProperties}
 				stroke="currentColor"
 				strokeWidth="1"
@@ -54,7 +54,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M30 22 L46 14"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "950ms", "--dd": "500ms" } as React.CSSProperties}
 				stroke="var(--accent)"
 				strokeWidth="1.8"
@@ -63,7 +63,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M30 24 L46 21"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "1050ms", "--dd": "500ms" } as React.CSSProperties}
 				stroke="currentColor"
 				strokeWidth="1.8"
@@ -73,7 +73,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M30 26 L46 28"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "1150ms", "--dd": "500ms" } as React.CSSProperties}
 				stroke="currentColor"
 				strokeWidth="1.8"
@@ -83,7 +83,7 @@ export function Logo({ size = 34 }: { size?: number }) {
 			<path
 				d="M30 28 L46 35"
 				pathLength={1}
-				className="logo-draw"
+				className="animate-logo-draw [stroke-dasharray:1] [stroke-dashoffset:1] [animation-delay:var(--d,0ms)] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
 				style={{ "--d": "1250ms", "--dd": "500ms" } as React.CSSProperties}
 				stroke="var(--accent)"
 				strokeWidth="1.8"

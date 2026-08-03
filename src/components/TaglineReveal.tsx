@@ -31,13 +31,7 @@ function Word({ children }: { children: string }) {
 		<span
 			ref={ref}
 			aria-hidden="true"
-			className="inline-block"
-			style={{
-				color: on
-					? "var(--ink)"
-					: "color-mix(in srgb, var(--ink) 30%, transparent)",
-				transition: "color 0.7s var(--ease)",
-			}}
+			className={`inline-block transition-colors duration-700 ease-(--ease) ${on ? "text-ink" : "text-ink/30"}`}
 		>
 			{children}
 		</span>

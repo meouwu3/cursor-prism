@@ -87,7 +87,8 @@ export function useInView<T extends HTMLElement>(): [
 	return [ref, inView];
 }
 
-/** Scroll-driven reveal: heavy fade up with blur, staggered via --d. */
+/** Scroll-driven reveal: heavy fade up with blur, staggered via --d.
+   32px of travel — the blur carries the weight, not the distance. */
 export function Reveal({
 	children,
 	className = "",
@@ -100,10 +101,12 @@ export function Reveal({
 	delay?: number;
 }) {
 	const [ref, inView] = useInView<HTMLDivElement>();
+	// Hidden state is applied only until the element enters the viewport —
+	// never fight utility ordering with a permanent "on" counterpart
 	return (
 		<div
 			ref={ref}
-			className={`reveal${inView ? " reveal-on" : ""} ${className}`}
+			className={`transition-[opacity,translate,filter] duration-900 ease-(--ease) [transition-delay:var(--d,0ms)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none${inView ? "" : " translate-y-8 opacity-0 blur-sm"} ${className}`}
 			style={{ ...style, "--d": `${delay}ms` } as CSSProperties}
 		>
 			{children}
@@ -123,16 +126,18 @@ export function SectionTitle({
 	delay?: number;
 }) {
 	return (
-		<div className="rise mb-5" style={{ "--d": `${delay}ms` } as CSSProperties}>
-			<div className="kicker mb-1.5">{eyebrow}</div>
-			<h2 className="display text-xl font-semibold">{title}</h2>
+		<div
+			className="mb-5 animate-rise [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
+			style={{ "--d": `${delay}ms` } as CSSProperties}
+		>
+			<div className="mb-1.5 font-mono text-xs tracking-[0.06em] text-ink-3">
+				{eyebrow}
+			</div>
+			<h2 className="font-display text-balance text-xl font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
+				{title}
+			</h2>
 			{desc ? (
-				<p
-					className="mt-1 text-sm leading-relaxed"
-					style={{ color: "var(--ink-2)" }}
-				>
-					{desc}
-				</p>
+				<p className="mt-1 text-sm leading-relaxed text-ink-2">{desc}</p>
 			) : null}
 		</div>
 	);
@@ -154,9 +159,23 @@ export function Card({
 		e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
 		e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
 	};
+	// Ruled section on paper (top hairline), hairline box with corner
+	// ticks and a tinted shadow on blueprint
+	const frame =
+		"group/panel relative rounded-xs border-line bg-bg-2 print:rounded-none print:border-t print:border-t-line-strong print:bg-transparent blueprint:border blueprint:bg-[rgba(234,241,255,0.04)] blueprint:shadow-[0_16px_40px_-16px_rgba(4,16,40,0.45)] blueprint:before:pointer-events-none blueprint:before:absolute blueprint:before:-top-px blueprint:before:-left-px blueprint:before:size-2.5 blueprint:before:border-t blueprint:before:border-l blueprint:before:border-line-strong blueprint:before:content-[''] blueprint:after:pointer-events-none blueprint:after:absolute blueprint:after:-right-px blueprint:after:-bottom-px blueprint:after:size-2.5 blueprint:after:border-b blueprint:after:border-r blueprint:after:border-line-strong blueprint:after:content-['']";
 	return (
-		<div className={`panel ${className}`} style={style} onPointerMove={track}>
-			<div aria-hidden="true" className="panel-spot" />
+		<div
+			className={`${frame} ${className}`}
+			style={style}
+			onPointerMove={track}
+		>
+			{/* Spotlight: the hairline illuminates under the cursor. A radial
+			    gradient masked down to the 1px border ring; print stays matte.
+			    Longhands only — a mask shorthand would reset the composite. */}
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute inset-0 hidden rounded-[inherit] p-px opacity-0 transition-opacity duration-450 ease-(--ease) group-hover/panel:opacity-100 blueprint:block [background:radial-gradient(150px_circle_at_var(--mx,50%)_var(--my,50%),color-mix(in_srgb,var(--accent)_60%,transparent),transparent_70%)] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [mask-clip:content-box,border-box] [mask-composite:exclude] [-webkit-mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-clip:content-box,border-box] [-webkit-mask-composite:xor]"
+			/>
 			{children}
 		</div>
 	);

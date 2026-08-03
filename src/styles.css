@@ -1,8 +1,74 @@
 @import "tailwindcss";
 
+/* Utilities resolve through the per-theme CSS variables below, so one
+   set of classes serves both design languages. `inline` keeps the
+   var() reference at the utility site and lets [data-theme] re-resolve
+   it at runtime. */
+@theme inline {
+	--color-bg: var(--bg);
+	--color-bg-2: var(--bg-2);
+	--color-ink: var(--ink);
+	--color-ink-2: var(--ink-2);
+	--color-ink-3: var(--ink-3);
+	--color-line: var(--line);
+	--color-line-strong: var(--line-strong);
+	--color-accent: var(--accent);
+	--color-accent-ink: var(--accent-ink);
+	--font-display: var(--font-display);
+	--font-body: var(--font-body);
+}
+
 @theme {
 	--font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+	/* Entrance animations; delay rides on --d, set inline per element */
+	--animate-rise: rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+	--animate-fade-in: fade-in 0.6s var(--ease) both;
+	--animate-grow-x: grow-x 0.7s var(--ease) both;
+	--animate-skel: skel-pulse 1.4s var(--ease) infinite;
+	--animate-logo-draw: logo-draw var(--dd, 0.8s) var(--ease) both;
+
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@keyframes grow-x {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+	@keyframes skel-pulse {
+		50% {
+			opacity: 0.45;
+		}
+	}
+	@keyframes logo-draw {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
 }
+
+/* Theme variants for markup: print:... and blueprint:... */
+@custom-variant print (&:where([data-theme="print"] *));
+@custom-variant blueprint (&:where([data-theme="blueprint"] *));
 
 /* ==========================================================================
    Theme tokens — two design languages on one semantic skeleton.
@@ -20,7 +86,6 @@
 	--line-strong: #1b1a16;
 	--accent: #d9481c;
 	--accent-ink: #fffef9;
-	--radius: 2px;
 	--font-display: Georgia, "Times New Roman", serif;
 	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
 	--ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -39,7 +104,6 @@
 	--line-strong: #9db9ec;
 	--accent: #ffd447;
 	--accent-ink: #113c82;
-	--radius: 2px;
 	--font-display: "Geist Mono", ui-monospace, monospace;
 	--font-body: "Geist Mono", ui-monospace, monospace;
 	--ease: cubic-bezier(0.32, 0.72, 0, 1);
@@ -48,557 +112,115 @@
 }
 
 /* ==========================================================================
-   Base
+   Base — inside @layer base so utilities always win over it
    ========================================================================== */
 
-* {
-	box-sizing: border-box;
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-html,
-body,
-#app {
-	min-height: 100%;
-}
-
-body {
-	margin: 0;
-	background: var(--bg);
-	color: var(--ink);
-	font-family: var(--font-body);
-	-webkit-font-smoothing: antialiased;
-	overflow-x: hidden;
-	transition:
-		background-color 0.5s var(--ease),
-		color 0.5s var(--ease);
-}
-
-::selection {
-	background: var(--accent);
-	color: var(--accent-ink);
-}
-
-::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-::-webkit-scrollbar-track {
-	background: transparent;
-}
-::-webkit-scrollbar-thumb {
-	background: var(--line-strong);
-	border-radius: 0;
-	border: 3px solid var(--bg);
-}
-
-/* Theme-change color easing on the usual suspects */
-h1, h2, h3, p, span, div, button, a, td, th, li {
-	transition:
-		background-color 0.5s var(--ease),
-		border-color 0.5s var(--ease),
-		color 0.5s var(--ease);
-}
-
-/* Visible focus is an accessibility requirement, not a style choice */
-:focus-visible {
-	outline: 2px solid var(--accent);
-	outline-offset: 2px;
-}
-
-/* Screen-reader-only text */
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border: 0;
-}
-
-/* Skip to content (keyboard users) */
-.skip-link {
-	position: fixed;
-	top: 8px;
-	left: 8px;
-	z-index: 100;
-	transform: translateY(-64px);
-	transition: transform 0.25s var(--ease);
-	background: var(--bg-2);
-	color: var(--ink);
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius);
-	padding: 8px 12px;
-	font-size: 14px;
-	text-decoration: none;
-}
-.skip-link:focus-visible {
-	transform: none;
-}
-
-/* Circular reveal driven by ThemeProvider (--vt-x / --vt-y) */
-::view-transition-old(root) {
-	animation: none;
-	z-index: 1;
-}
-::view-transition-new(root) {
-	animation: vt-reveal 0.65s var(--ease) both;
-	z-index: 2;
-}
-@keyframes vt-reveal {
-	from {
-		clip-path: circle(0px at var(--vt-x, 50vw) var(--vt-y, 40vh));
+@layer base {
+	html {
+		scroll-behavior: smooth;
 	}
-	to {
-		clip-path: circle(150% at var(--vt-x, 50vw) var(--vt-y, 40vh));
+
+	html,
+	body,
+	#app {
+		min-height: 100%;
 	}
-}
 
-/* ==========================================================================
-   Textures (pure CSS, behind everything)
-   ========================================================================== */
-
-body::before {
-	content: "";
-	position: fixed;
-	inset: 0;
-	pointer-events: none;
-	z-index: 0;
-}
-
-/* Print: faint paper grain */
-[data-theme="print"] body::before {
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-}
-
-/* Blueprint: graph paper + faint film grain to break digital flatness */
-[data-theme="blueprint"] body::before {
-	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
-		linear-gradient(rgba(234, 241, 255, 0.055) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(234, 241, 255, 0.055) 1px, transparent 1px),
-		linear-gradient(rgba(234, 241, 255, 0.09) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(234, 241, 255, 0.09) 1px, transparent 1px);
-	background-size:
-		120px 120px,
-		28px 28px,
-		28px 28px,
-		140px 140px,
-		140px 140px;
-}
-
-/* ==========================================================================
-   Semantic classes — one JSX, two looks
-   ========================================================================== */
-
-/* Meta label: sentence case, quiet, monospaced */
-.kicker {
-	font-family: var(--font-mono);
-	font-size: 12px;
-	letter-spacing: 0.06em;
-	color: var(--ink-3);
-}
-
-.display {
-	font-family: var(--font-display);
-	color: var(--ink);
-	text-wrap: balance;
-}
-
-p {
-	text-wrap: pretty;
-}
-
-[data-theme="print"] .display {
-	letter-spacing: -0.015em;
-}
-[data-theme="blueprint"] .display {
-	letter-spacing: -0.04em;
-}
-
-.accent-word {
-	color: var(--accent);
-}
-[data-theme="blueprint"] .accent-word {
-	text-decoration: underline;
-	text-decoration-style: dashed;
-	text-underline-offset: 0.18em;
-	text-decoration-thickness: 1px;
-}
-
-/* Hero headline gradient — the only gradient on the site, text only */
-.hero-grad {
-	background-image: var(--hero-grad);
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
-}
-
-.num {
-	font-family: var(--font-mono);
-	font-variant-numeric: tabular-nums;
-	letter-spacing: -0.01em;
-}
-
-/* Panels: ruled sections on paper, hairline boxes on blueprint */
-.panel {
-	background: var(--bg-2);
-	border: 1px solid var(--line);
-	border-radius: var(--radius);
-	position: relative;
-}
-[data-theme="print"] .panel {
-	background: transparent;
-	border: none;
-	border-top: 1px solid var(--line-strong);
-	border-radius: 0;
-}
-[data-theme="blueprint"] .panel {
-	background: rgba(234, 241, 255, 0.04);
-	/* Tinted shadow carrying the background hue, not pure black */
-	box-shadow: 0 16px 40px -16px rgba(4, 16, 40, 0.45);
-}
-[data-theme="blueprint"] .panel::before,
-[data-theme="blueprint"] .panel::after {
-	content: "";
-	position: absolute;
-	width: 10px;
-	height: 10px;
-	pointer-events: none;
-}
-[data-theme="blueprint"] .panel::before {
-	top: -1px;
-	left: -1px;
-	border-top: 1px solid var(--line-strong);
-	border-left: 1px solid var(--line-strong);
-}
-[data-theme="blueprint"] .panel::after {
-	bottom: -1px;
-	right: -1px;
-	border-bottom: 1px solid var(--line-strong);
-	border-right: 1px solid var(--line-strong);
-}
-
-/* Spotlight border: the hairline illuminates under the cursor.
-   Blueprint only — ruled paper stays matte. */
-.panel-spot {
-	display: none;
-}
-[data-theme="blueprint"] .panel-spot {
-	display: block;
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	padding: 1px;
-	pointer-events: none;
-	background: radial-gradient(
-		150px circle at var(--mx, 50%) var(--my, 50%),
-		color-mix(in srgb, var(--accent) 60%, transparent),
-		transparent 70%
-	);
-	-webkit-mask:
-		linear-gradient(#000 0 0) content-box,
-		linear-gradient(#000 0 0);
-	-webkit-mask-composite: xor;
-	mask:
-		linear-gradient(#000 0 0) content-box,
-		linear-gradient(#000 0 0);
-	mask-composite: exclude;
-	opacity: 0;
-	transition: opacity 0.45s var(--ease);
-}
-[data-theme="blueprint"] .panel:hover .panel-spot {
-	opacity: 1;
-}
-
-/* Buttons: sentence case, semibold, 8px/12px padding */
-.btn {
-	font-family: var(--font-body);
-	font-size: 14px;
-	font-weight: 600;
-	padding: 8px 12px;
-	border: 1px solid var(--line);
-	color: var(--ink-2);
-	background: transparent;
-	border-radius: var(--radius);
-	cursor: pointer;
-	transition:
-		background-color 0.25s var(--ease),
-		border-color 0.25s var(--ease),
-		color 0.25s var(--ease),
-		transform 0.2s var(--spring);
-}
-.btn:hover {
-	color: var(--ink);
-	border-color: var(--line-strong);
-	transform: translateY(-1px);
-}
-.btn:active {
-	transform: scale(0.98);
-}
-[data-theme="print"] .btn {
-	border-color: var(--ink);
-	color: var(--ink);
-}
-[data-theme="print"] .btn:hover {
-	background: var(--ink);
-	color: var(--bg);
-}
-[data-theme="blueprint"] .btn {
-	border-style: dashed;
-	border-color: var(--line-strong);
-}
-[data-theme="blueprint"] .btn:hover {
-	border-color: var(--ink);
-}
-
-.btn-solid {
-	background: var(--accent);
-	border-color: var(--accent);
-	color: var(--accent-ink);
-}
-.btn-solid:hover {
-	background: var(--accent);
-	border-color: var(--accent);
-	color: var(--accent-ink);
-	filter: brightness(0.93);
-}
-[data-theme="print"] .btn-solid:hover {
-	background: var(--accent);
-	color: var(--accent-ink);
-}
-
-/* Chips (file badge, kind tag) */
-.chip {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5em;
-	font-family: var(--font-mono);
-	font-size: 12px;
-	height: 32px;
-	color: var(--ink-2);
-	border: 1px solid var(--line);
-	border-radius: var(--radius);
-	padding: 0 0.9em;
-}
-[data-theme="blueprint"] .chip {
-	border-style: dashed;
-}
-
-/* Quiet header actions: same 32px rhythm as chips and the theme switcher */
-.btn-quiet {
-	display: inline-flex;
-	align-items: center;
-	font-family: var(--font-body);
-	font-size: 12px;
-	font-weight: 500;
-	height: 32px;
-	padding: 0 12px;
-	border: 1px solid var(--line);
-	color: var(--ink-2);
-	background: transparent;
-	border-radius: var(--radius);
-	cursor: pointer;
-	transition:
-		border-color 0.25s var(--ease),
-		color 0.25s var(--ease),
-		transform 0.2s var(--spring);
-}
-.btn-quiet:hover {
-	color: var(--ink);
-	border-color: var(--line-strong);
-	transform: translateY(-1px);
-}
-.btn-quiet:active {
-	transform: scale(0.98);
-}
-[data-theme="blueprint"] .btn-quiet {
-	border-style: dashed;
-}
-[data-theme="blueprint"] .theme-switch {
-	border-style: dashed;
-}
-
-/* Spring physics on small interactive elements */
-.theme-switch button {
-	transition: transform 0.25s var(--spring);
-}
-.theme-switch button:hover {
-	transform: scale(1.06);
-}
-
-/* Skeleton blocks shaped like the layout they replace */
-@keyframes skel-pulse {
-	50% {
-		opacity: 0.45;
+	body {
+		background: var(--bg);
+		color: var(--ink);
+		font-family: var(--font-body);
+		-webkit-font-smoothing: antialiased;
+		overflow-x: hidden;
+		transition:
+			background-color 0.5s var(--ease),
+			color 0.5s var(--ease);
 	}
-}
-.skel {
-	background: var(--line);
-	border-radius: var(--radius);
-	animation: skel-pulse 1.4s var(--ease) infinite;
-}
 
-/* Sticky glass masthead: the header stays reachable on long pages.
-   Print gets the strong bottom rule — the classic paper masthead. */
-.masthead {
-	position: sticky;
-	top: 0;
-	z-index: 40;
-	background: color-mix(in srgb, var(--bg) 80%, transparent);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border-bottom: 1px solid var(--line);
-}
-[data-theme="print"] .masthead {
-	border-bottom-color: var(--line-strong);
-}
-
-/* Hairline rules */
-.rule-t {
-	border-top: 1px solid var(--line);
-}
-.rule-t-strong {
-	border-top: 1px solid var(--line-strong);
-}
-
-/* KPI cells: ruled strip on paper, panels elsewhere */
-.kpi {
-	background: var(--bg-2);
-	border: 1px solid var(--line);
-	border-radius: var(--radius);
-}
-[data-theme="print"] .kpi {
-	background: transparent;
-	border: none;
-	border-radius: 0;
-	border-left: 1px solid var(--line);
-}
-[data-theme="print"] .kpi:first-child {
-	border-left: none;
-	padding-left: 0;
-}
-[data-theme="blueprint"] .kpi {
-	background: rgba(234, 241, 255, 0.04);
-}
-
-/* Chart tooltip */
-.chart-tip {
-	position: absolute;
-	pointer-events: none;
-	background: var(--bg-2);
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius);
-	padding: 8px 11px;
-	font-size: 12px;
-	line-height: 1.5;
-	color: var(--ink);
-	z-index: 30;
-	white-space: nowrap;
-}
-[data-theme="blueprint"] .chart-tip {
-	border-style: dashed;
-}
-
-/* ==========================================================================
-   Motion — quiet, quick, respectful
-   ========================================================================== */
-
-@keyframes rise {
-	from {
-		opacity: 0;
-		transform: translateY(12px);
+	::selection {
+		background: var(--accent);
+		color: var(--accent-ink);
 	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-.rise {
-	animation: rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-	animation-delay: var(--d, 0ms);
-}
 
-@keyframes fade-in {
-	from {
-		opacity: 0;
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
 	}
-	to {
-		opacity: 1;
+	::-webkit-scrollbar-track {
+		background: transparent;
 	}
-}
-.fade-in {
-	animation: fade-in 0.6s var(--ease) both;
-	animation-delay: var(--d, 0ms);
-}
+	::-webkit-scrollbar-thumb {
+		background: var(--line-strong);
+		border: 3px solid var(--bg);
+	}
 
-@keyframes grow-x {
-	from {
-		transform: scaleX(0);
+	/* Theme-change color easing on the usual suspects */
+	h1, h2, h3, p, span, div, button, a, td, th, li {
+		transition:
+			background-color 0.5s var(--ease),
+			border-color 0.5s var(--ease),
+			color 0.5s var(--ease);
 	}
-	to {
-		transform: scaleX(1);
+
+	/* Visible focus is an accessibility requirement, not a style choice */
+	:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
 	}
-}
-.grow-x {
-	transform-origin: left center;
-	animation: grow-x 0.7s var(--ease) both;
-	animation-delay: var(--d, 0ms);
-}
 
-/* Scroll reveal: heavy fade up with blur, driven by IntersectionObserver
-   (the Reveal component). 32px of travel — the blur carries the weight,
-   not the distance. --d staggers siblings. */
-.reveal {
-	opacity: 0;
-	transform: translateY(32px);
-	filter: blur(8px);
-	transition:
-		opacity 0.9s var(--ease),
-		transform 0.9s var(--ease),
-		filter 0.9s var(--ease);
-	transition-delay: var(--d, 0ms);
-}
-.reveal-on {
-	opacity: 1;
-	transform: translateY(0);
-	filter: blur(0);
-}
-
-/* Logo signature draw-in: strokes are normalized to pathLength="1",
-   --d sets the delay, --dd the draw duration */
-@keyframes logo-draw {
-	to {
-		stroke-dashoffset: 0;
+	p {
+		text-wrap: pretty;
 	}
-}
-.logo-draw {
-	stroke-dasharray: 1;
-	stroke-dashoffset: 1;
-	animation: logo-draw var(--dd, 0.8s) var(--ease) both;
-	animation-delay: var(--d, 0ms);
-}
 
-@media (prefers-reduced-motion: reduce) {
-	.rise,
-	.fade-in,
-	.grow-x {
+	/* Circular reveal driven by ThemeProvider (--vt-x / --vt-y) */
+	::view-transition-old(root) {
 		animation: none;
+		z-index: 1;
 	}
-	.logo-draw {
-		animation: none;
-		stroke-dashoffset: 0;
+	::view-transition-new(root) {
+		animation: vt-reveal 0.65s var(--ease) both;
+		z-index: 2;
 	}
-	.reveal {
-		opacity: 1;
-		transform: none;
-		filter: none;
-		transition: none;
+	@keyframes vt-reveal {
+		from {
+			clip-path: circle(0px at var(--vt-x, 50vw) var(--vt-y, 40vh));
+		}
+		to {
+			clip-path: circle(150% at var(--vt-x, 50vw) var(--vt-y, 40vh));
+		}
+	}
+
+	/* ========================================================================
+	   Textures (pure CSS, behind everything)
+	   ======================================================================== */
+
+	body::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	/* Print: faint paper grain */
+	[data-theme="print"] body::before {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+	}
+
+	/* Blueprint: graph paper + faint film grain to break digital flatness */
+	[data-theme="blueprint"] body::before {
+		background-image:
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+			linear-gradient(rgba(234, 241, 255, 0.055) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(234, 241, 255, 0.055) 1px, transparent 1px),
+			linear-gradient(rgba(234, 241, 255, 0.09) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(234, 241, 255, 0.09) 1px, transparent 1px);
+		background-size:
+			120px 120px,
+			28px 28px,
+			28px 28px,
+			140px 140px,
+			140px 140px;
 	}
 }
+
