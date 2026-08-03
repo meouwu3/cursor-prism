@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Backdrop } from "#/components/Backdrop";
 import { CompositionBars } from "#/components/charts/CompositionBars";
 import { Galaxy } from "#/components/charts/Galaxy";
 import { ModelDonut } from "#/components/charts/ModelDonut";
@@ -10,6 +9,7 @@ import { UsageHeatmap } from "#/components/charts/UsageHeatmap";
 import { InsightsGrid } from "#/components/InsightsGrid";
 import { KpiRow } from "#/components/KpiRow";
 import { Logo } from "#/components/Logo";
+import { ThemeSwitcher } from "#/components/ThemeSwitcher";
 import { Card, SectionTitle } from "#/components/ui";
 import {
 	buildInsights,
@@ -33,6 +33,7 @@ import {
 	setUsageCsv,
 	useUsageData,
 } from "#/lib/store";
+import { useChartTokens } from "#/lib/theme";
 
 export const Route = createFileRoute("/dashboard")({ component: Dashboard });
 
@@ -87,10 +88,7 @@ function Dashboard() {
 		// Skeleton while the session is being restored
 		return (
 			<div className="relative flex min-h-screen items-center justify-center">
-				<Backdrop />
-				<div className="num animate-pulse text-[12px] uppercase tracking-[0.35em] text-slate-500">
-					loading spectrum…
-				</div>
+				<div className="kicker animate-pulse">loading spectrum…</div>
 			</div>
 		);
 	}
@@ -99,32 +97,28 @@ function Dashboard() {
 
 	return (
 		<div className="relative min-h-screen">
-			<Backdrop />
-
 			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
 				{/* Top bar */}
-				<header className="fade-in mb-8 flex flex-wrap items-center justify-between gap-3">
+				<header className="fade-in rule-t-strong mb-8 flex flex-wrap items-center justify-between gap-3 pt-4">
 					<Link
 						to="/"
-						className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
+						className="flex items-center gap-2.5 transition-opacity hover:opacity-70"
 					>
 						<Logo size={26} />
-						<span className="text-[14px] font-semibold tracking-wide text-white/95">
-							Cursor<span className="text-gradient">Prism</span>
+						<span className="display text-[15px] font-semibold tracking-tight">
+							CursorPrism
 						</span>
 					</Link>
 
 					<div className="flex flex-wrap items-center gap-2">
-						<span className="num flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[11.5px] text-slate-400">
+						<span className="chip">
 							{data.isDemo ? (
 								<>
-									<span className="h-1.5 w-1.5 rounded-full bg-violet-300" />
 									demo data · {formatDay(summary.rangeStart)} ~{" "}
 									{formatDay(summary.rangeEnd)}
 								</>
 							) : (
 								<>
-									<span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
 									{data.fileName} · {formatDay(summary.rangeStart)} ~{" "}
 									{formatDay(summary.rangeEnd)}
 								</>
@@ -133,7 +127,7 @@ function Dashboard() {
 						<button
 							type="button"
 							onClick={() => fileInput.current?.click()}
-							className="num rounded-full border border-cyan-300/30 bg-cyan-300/8 px-3.5 py-1.5 text-[11.5px] text-cyan-200 transition-colors hover:border-cyan-300/60"
+							className="btn"
 						>
 							Change CSV
 						</button>
@@ -143,10 +137,11 @@ function Dashboard() {
 								clearUsageData();
 								navigate({ to: "/" });
 							}}
-							className="num rounded-full border border-white/8 px-3.5 py-1.5 text-[11.5px] text-slate-500 transition-colors hover:border-white/20 hover:text-slate-300"
+							className="btn"
 						>
 							Clear
 						</button>
+						<ThemeSwitcher />
 						<input
 							ref={fileInput}
 							type="file"
@@ -162,7 +157,14 @@ function Dashboard() {
 				</header>
 
 				{error ? (
-					<div className="mb-4 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-2.5 text-[13px] text-red-300">
+					<div
+						className="mb-4 border px-4 py-2.5 text-[13px]"
+						style={{
+							borderRadius: "var(--radius)",
+							borderColor: "var(--accent)",
+							color: "var(--accent)",
+						}}
+					>
 						Parse failed: {error}
 					</div>
 				) : null}
@@ -178,14 +180,15 @@ function Dashboard() {
 					<Card className="overflow-hidden">
 						<div className="flex items-baseline justify-between px-5 pt-4">
 							<div>
-								<div className="num text-[10.5px] uppercase tracking-[0.3em] text-cyan-300/70">
-									token galaxy
-								</div>
-								<h2 className="mt-0.5 text-[16px] font-semibold text-white/95">
+								<div className="kicker">token galaxy</div>
+								<h2 className="display mt-0.5 text-[16px] font-semibold">
 									Every request is a star
 								</h2>
 							</div>
-							<div className="num hidden text-[11px] text-slate-600 sm:block">
+							<div
+								className="num hidden text-[11px] sm:block"
+								style={{ color: "var(--ink-3)" }}
+							>
 								{rows.length} particles
 							</div>
 						</div>
@@ -203,24 +206,29 @@ function Dashboard() {
 					<Card className="px-5 pt-4 pb-3">
 						<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
 							<div>
-								<div className="num text-[10.5px] uppercase tracking-[0.3em] text-cyan-300/70">
-									timeline
-								</div>
-								<h2 className="mt-0.5 text-[16px] font-semibold text-white/95">
+								<div className="kicker">timeline</div>
+								<h2 className="display mt-0.5 text-[16px] font-semibold">
 									Daily rhythm
 								</h2>
 							</div>
-							<div className="flex rounded-full border border-white/10 p-0.5">
+							<div
+								className="flex border p-0.5"
+								style={{
+									borderColor: "var(--line)",
+									borderRadius: "var(--radius)",
+								}}
+							>
 								{(["tokens", "cost"] as const).map((m) => (
 									<button
 										key={m}
 										type="button"
 										onClick={() => setMode(m)}
-										className={`num rounded-full px-3.5 py-1 text-[11.5px] transition-all ${
-											mode === m
-												? "bg-cyan-300/15 text-cyan-200"
-												: "text-slate-500 hover:text-slate-300"
-										}`}
+										className="num cursor-pointer border-none px-3.5 py-1 text-[11px] uppercase tracking-[0.1em] transition-colors"
+										style={{
+											borderRadius: "calc(var(--radius) - 1px)",
+											background: mode === m ? "var(--ink)" : "transparent",
+											color: mode === m ? "var(--bg)" : "var(--ink-3)",
+										}}
 									>
 										{m === "tokens" ? "Tokens" : "Cost"}
 									</button>
@@ -309,14 +317,15 @@ function Dashboard() {
 					<Card className="overflow-hidden">
 						<div className="flex items-baseline justify-between px-5 pt-4 pb-3">
 							<div>
-								<div className="num text-[10.5px] uppercase tracking-[0.3em] text-cyan-300/70">
-									ledger
-								</div>
-								<h2 className="mt-0.5 text-[16px] font-semibold text-white/95">
+								<div className="kicker">ledger</div>
+								<h2 className="display mt-0.5 text-[16px] font-semibold">
 									Request ledger
 								</h2>
 							</div>
-							<span className="num text-[11px] text-slate-600">
+							<span
+								className="num text-[11px]"
+								style={{ color: "var(--ink-3)" }}
+							>
 								latest {analytics.recent.length} rows
 							</span>
 						</div>
@@ -324,7 +333,10 @@ function Dashboard() {
 					</Card>
 				</section>
 
-				<footer className="mt-14 text-center text-[12px] text-slate-600">
+				<footer
+					className="rule-t mt-14 pt-5 text-center text-[12px]"
+					style={{ color: "var(--ink-3)" }}
+				>
 					CursorPrism · data lives only in your browser · built with TanStack
 					Start
 				</footer>
@@ -334,11 +346,18 @@ function Dashboard() {
 }
 
 function DetailTable({ rows }: { rows: UsageRow[] }) {
+	const tokens = useChartTokens();
 	return (
 		<div className="overflow-x-auto">
 			<table className="w-full min-w-[760px] text-left text-[12px]">
 				<thead>
-					<tr className="border-y border-white/6 text-slate-500">
+					<tr
+						className="rule-t-strong"
+						style={{
+							borderBottom: "1px solid var(--line)",
+							color: "var(--ink-3)",
+						}}
+					>
 						<th className="num px-5 py-2.5 font-normal">Time</th>
 						<th className="px-2 py-2.5 font-normal">Kind</th>
 						<th className="px-2 py-2.5 font-normal">Model</th>
@@ -355,43 +374,82 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 					{rows.map((r) => (
 						<tr
 							key={r.date.getTime() + r.model}
-							className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.03]"
+							className="transition-colors"
+							style={{ borderBottom: "1px solid var(--line)" }}
 						>
-							<td className="num px-5 py-2 whitespace-nowrap text-slate-400">
+							<td
+								className="num px-5 py-2 whitespace-nowrap"
+								style={{ color: "var(--ink-2)" }}
+							>
 								{formatDateTime(r.date)}
 							</td>
 							<td className="px-2 py-2">
-								<span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10.5px] text-slate-400">
+								<span
+									className="border px-1.5 py-0.5 text-[10.5px]"
+									style={{
+										borderRadius: "calc(var(--radius) - 1px)",
+										borderColor: "var(--line)",
+										color: "var(--ink-2)",
+									}}
+								>
 									{r.kind}
 								</span>
 								{r.maxMode ? (
-									<span className="ml-1 rounded-md border border-amber-300/30 bg-amber-300/10 px-1.5 py-0.5 text-[10.5px] text-amber-300">
+									<span
+										className="ml-1 border px-1.5 py-0.5 text-[10.5px]"
+										style={{
+											borderRadius: "calc(var(--radius) - 1px)",
+											borderColor: "var(--accent)",
+											color: "var(--accent)",
+										}}
+									>
 										MAX
 									</span>
 								) : null}
 							</td>
 							<td className="px-2 py-2">
-								<span className="flex items-center gap-1.5 text-slate-300">
+								<span
+									className="flex items-center gap-1.5"
+									style={{ color: "var(--ink)" }}
+								>
 									<span
-										className="h-1.5 w-1.5 shrink-0 rounded-full"
-										style={{ background: modelColor(r.model) }}
+										className="h-1.5 w-1.5 shrink-0"
+										style={{
+											background: modelColor(r.model, tokens.palette),
+											borderRadius: "calc(var(--radius) - 1px)",
+										}}
 									/>
 									<span className="max-w-[180px] truncate">{r.model}</span>
 								</span>
 							</td>
-							<td className="num px-2 py-2 text-right text-cyan-300/80">
+							<td
+								className="num px-2 py-2 text-right"
+								style={{ color: "var(--accent)" }}
+							>
 								{formatTokens(r.cacheRead)}
 							</td>
-							<td className="num px-2 py-2 text-right text-slate-400">
+							<td
+								className="num px-2 py-2 text-right"
+								style={{ color: "var(--ink-2)" }}
+							>
 								{formatTokens(r.inputWithCacheWrite + r.inputWithoutCacheWrite)}
 							</td>
-							<td className="num px-2 py-2 text-right text-slate-400">
+							<td
+								className="num px-2 py-2 text-right"
+								style={{ color: "var(--ink-2)" }}
+							>
 								{formatTokens(r.outputTokens)}
 							</td>
-							<td className="num px-2 py-2 text-right font-medium text-white/85">
+							<td
+								className="num px-2 py-2 text-right font-medium"
+								style={{ color: "var(--ink)" }}
+							>
 								{formatTokens(r.totalTokens)}
 							</td>
-							<td className="num px-5 py-2 text-right text-pink-300/90">
+							<td
+								className="num px-5 py-2 text-right"
+								style={{ color: "var(--ink)" }}
+							>
 								{formatCost(r.cost)}
 							</td>
 						</tr>

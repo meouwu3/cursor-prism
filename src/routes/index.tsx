@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Backdrop } from "#/components/Backdrop";
 import { Logo } from "#/components/Logo";
+import { ThemeSwitcher } from "#/components/ThemeSwitcher";
 import { UploadZone } from "#/components/UploadZone";
 import { CsvParseError } from "#/lib/csv";
 import {
@@ -16,32 +16,26 @@ export const Route = createFileRoute("/")({ component: Landing });
 
 const FEATURES = [
 	{
-		icon: "◢",
 		title: "Trend Prism",
 		desc: "Daily token & cost curves with a 7-day moving average, so your rhythm stands out.",
 	},
 	{
-		icon: "◈",
 		title: "Model Spectrum",
 		desc: "Per-model share and composition — see exactly which model does the heavy lifting.",
 	},
 	{
-		icon: "❖",
 		title: "Cache Economics",
 		desc: "Cache reads vs fresh input vs output. Quantify how hard context reuse works for you.",
 	},
 	{
-		icon: "▦",
 		title: "Activity Heat",
 		desc: "A 7 × 24 heat matrix that exposes your peak coding hours.",
 	},
 	{
-		icon: "✦",
 		title: "Token Galaxy",
 		desc: "A hand-rolled 3D particle cloud. Every request is a star you can grab and inspect.",
 	},
 	{
-		icon: "◭",
 		title: "Auto Insights",
 		desc: "Cost concentration, peak windows, cost per million tokens — conclusions, not just charts.",
 	},
@@ -100,39 +94,40 @@ function Landing() {
 
 	return (
 		<div className="relative min-h-screen">
-			<Backdrop />
-
 			<div className="relative mx-auto max-w-5xl px-5 pt-7 pb-20">
 				{/* Top bar */}
-				<header className="fade-in flex items-center justify-between">
+				<header className="fade-in rule-t-strong flex items-center justify-between pt-4">
 					<div className="flex items-center gap-2.5">
 						<Logo size={30} />
-						<span className="text-[15px] font-semibold tracking-wide text-white/95">
-							Cursor<span className="text-gradient">Prism</span>
+						<span className="display text-[17px] font-semibold tracking-tight">
+							CursorPrism
 						</span>
 					</div>
-					<span className="num text-[11px] uppercase tracking-[0.25em] text-slate-500">
-						open source · MIT
-					</span>
+					<div className="flex items-center gap-4">
+						<span className="kicker hidden sm:block">open source · MIT</span>
+						<ThemeSwitcher />
+					</div>
 				</header>
 
 				{/* Hero */}
 				<section className="mt-16 text-center sm:mt-20">
-					<div className="rise num mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/5 px-3.5 py-1.5 text-[10.5px] uppercase tracking-[0.3em] text-cyan-300/90">
-						<span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
-						cursor usage observatory
-					</div>
+					<div className="rise kicker">cursor usage observatory</div>
 					<h1
-						className="rise text-4xl leading-[1.15] font-bold tracking-tight text-white sm:text-6xl"
+						className="display rise mt-4 text-4xl leading-[1.12] font-semibold sm:text-6xl"
 						style={{ "--d": "80ms" } as React.CSSProperties}
 					>
-						Refract every <span className="text-gradient">token</span>
+						Refract every <span className="accent-word">token</span>
 						<br />
 						into its spectrum
 					</h1>
 					<p
-						className="rise mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-slate-400"
-						style={{ "--d": "160ms" } as React.CSSProperties}
+						className="rise mx-auto mt-5 max-w-xl text-[15px] leading-relaxed"
+						style={
+							{
+								"--d": "160ms",
+								color: "var(--ink-2)",
+							} as React.CSSProperties
+						}
 					>
 						Cursor hands you a spreadsheet. CursorPrism hands you an
 						observatory.
@@ -149,56 +144,61 @@ function Landing() {
 				>
 					<UploadZone onFile={onFile} error={error} />
 					<div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
-						<button
-							type="button"
-							onClick={onDemo}
-							className="group num rounded-full border border-violet-300/30 bg-violet-300/8 px-5 py-2 text-[13px] text-violet-200 transition-all hover:border-violet-300/60 hover:bg-violet-300/15"
-							style={{ boxShadow: "0 0 24px -8px rgba(196,181,253,0.4)" }}
-						>
-							✦ No CSV handy? Load demo data
+						<button type="button" onClick={onDemo} className="btn btn-solid">
+							No CSV handy? Load demo data
 						</button>
 						{data.status === "ready" && !data.isDemo ? (
 							<button
 								type="button"
 								onClick={() => navigate({ to: "/dashboard" })}
-								className="num rounded-full border border-white/10 px-5 py-2 text-[13px] text-slate-400 transition-colors hover:border-cyan-300/40 hover:text-cyan-200"
+								className="btn"
 							>
-								Resume last session · {data.fileName}
+								Resume · {data.fileName}
 							</button>
 						) : null}
 						{data.status === "ready" ? (
 							<button
 								type="button"
 								onClick={clearUsageData}
-								className="num px-3 py-2 text-[12px] text-slate-600 transition-colors hover:text-slate-400"
+								className="num cursor-pointer border-none bg-transparent px-3 py-2 text-[12px]"
+								style={{ color: "var(--ink-3)" }}
 							>
 								Clear local data
 							</button>
 						) : null}
 					</div>
 					<p
-						className="fade-in mt-4 text-center text-[12px] text-slate-600"
-						style={{ "--d": "400ms" } as React.CSSProperties}
+						className="fade-in mt-4 text-center text-[12px]"
+						style={
+							{ "--d": "400ms", color: "var(--ink-3)" } as React.CSSProperties
+						}
 					>
-						🔒 Parsed 100% locally in your browser — nothing is ever uploaded
+						Local-first — parsed entirely in your browser, nothing is ever
+						uploaded
 					</p>
 				</section>
 
 				{/* Steps */}
-				<section className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+				<section className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-x-8 sm:grid-cols-3">
 					{STEPS.map((s, i) => (
 						<div
 							key={s.n}
-							className="glass rise px-5 py-4"
+							className="rule-t rise pt-3 pb-1"
 							style={{ "--d": `${300 + i * 90}ms` } as React.CSSProperties}
 						>
-							<div className="num text-[11px] tracking-[0.2em] text-cyan-300/70">
+							<div
+								className="num text-[11px]"
+								style={{ color: "var(--accent)" }}
+							>
 								{s.n}
 							</div>
-							<div className="mt-1.5 text-[14.5px] font-semibold text-white/90">
+							<div className="display mt-1.5 text-[15px] font-semibold">
 								{s.title}
 							</div>
-							<div className="mt-1 text-[12px] leading-relaxed text-slate-500">
+							<div
+								className="mt-1 text-[12px] leading-relaxed"
+								style={{ color: "var(--ink-2)" }}
+							>
 								{s.desc}
 							</div>
 						</div>
@@ -211,27 +211,31 @@ function Landing() {
 						className="rise mb-6 text-center"
 						style={{ "--d": "380ms" } as React.CSSProperties}
 					>
-						<div className="num text-[11px] uppercase tracking-[0.3em] text-slate-500">
-							six lenses
-						</div>
-						<h2 className="mt-1.5 text-[22px] font-semibold text-white/95">
+						<div className="kicker">the index</div>
+						<h2 className="display mt-1.5 text-[24px] font-semibold">
 							Six lenses on your usage
 						</h2>
 					</div>
-					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+					<div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
 						{FEATURES.map((f, i) => (
 							<div
 								key={f.title}
-								className="glass glass-hover rise group px-5 py-4.5"
+								className="rule-t rise pt-3 pb-4"
 								style={{ "--d": `${420 + i * 60}ms` } as React.CSSProperties}
 							>
-								<div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-xl border border-white/8 bg-white/[0.04] text-[15px] text-cyan-300 transition-colors group-hover:border-cyan-300/30">
-									{f.icon}
+								<div
+									className="num text-[11px]"
+									style={{ color: "var(--ink-3)" }}
+								>
+									{String(i + 1).padStart(2, "0")}
 								</div>
-								<div className="text-[14.5px] font-semibold text-white/90">
+								<div className="display mt-1.5 text-[15px] font-semibold">
 									{f.title}
 								</div>
-								<p className="mt-1 text-[12.5px] leading-relaxed text-slate-500">
+								<p
+									className="mt-1 text-[12.5px] leading-relaxed"
+									style={{ color: "var(--ink-2)" }}
+								>
 									{f.desc}
 								</p>
 							</div>
@@ -240,13 +244,14 @@ function Landing() {
 				</section>
 
 				<footer
-					className="fade-in mt-20 text-center text-[12px] text-slate-600"
-					style={{ "--d": "600ms" } as React.CSSProperties}
+					className="fade-in rule-t mt-16 pt-5 text-center text-[12px]"
+					style={
+						{ "--d": "600ms", color: "var(--ink-3)" } as React.CSSProperties
+					}
 				>
 					<p>
-						CursorPrism — built with{" "}
-						<span className="text-slate-400">TanStack Start</span> · your data
-						never leaves the browser
+						CursorPrism — built with TanStack Start · your data never leaves the
+						browser
 					</p>
 				</footer>
 			</div>
