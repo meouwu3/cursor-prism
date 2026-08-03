@@ -2,7 +2,7 @@
 
 > Refract every Cursor token into its spectrum.
 
-The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, models, cache economics, activity heat, cost concentration — plus a 3D token galaxy you can grab and spin.
+The Cursor dashboard hands you a plain table. **Cursor Prism** turns your exported usage CSV into an observatory: trends, models, cache economics — plus a 3D token galaxy you can grab and spin.
 
 **100% local parsing** — your CSV never leaves the browser (`FileReader`, in-memory only). Nothing is uploaded, tracked, persisted, or stored server-side. There is no server side.
 
@@ -17,16 +17,14 @@ One semantic token system, two complete looks. Switch from the top bar — the c
 | Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
 | ![Print](docs/screenshots/print-galaxy.png) | ![Blueprint](docs/screenshots/blueprint-galaxy.png) |
 
-## Six lenses
+## Four lenses
 
 | Lens | What it shows |
 | --- | --- |
 | Trend Prism | Daily token & cost area charts with a 7-day moving-average reference |
 | Model Spectrum | Per-model share donut and composition — which model does the heavy lifting |
 | Cache Economics | Cache reads vs fresh input vs output — quantify your context reuse |
-| Activity Heat | A 7 × 24 heat matrix that exposes your peak coding hours |
 | Token Galaxy | A hand-rolled, dependency-free 3D particle cloud. Every request is a star — drag to rotate, hover to inspect |
-| Auto Insights | Rule-based conclusions: cache hit rate, Pareto cost concentration, cost per 1M tokens, and more |
 
 ## Quick start
 
@@ -39,13 +37,13 @@ Then:
 
 1. **Export** — open [cursor.com/dashboard](https://cursor.com/dashboard) → Usage → **Export CSV**
 2. **Drop** — drag the CSV onto the landing page (or click to browse)
-3. **Explore** — six lenses on where your tokens actually go
+3. **Explore** — four lenses on where your tokens actually go
 
 ## Tech stack
 
 - [TanStack Start](https://tanstack.com/start) + React 19 + Vite
 - Tailwind CSS v4
-- **Zero chart libraries** — every visualization is hand-rolled SVG / Canvas (area chart, donut, stacked bars, heatmap, 3D particle cloud)
+- **Zero chart libraries** — every visualization is hand-rolled SVG / Canvas (area chart, donut, stacked bars, 3D particle cloud)
 - Theme system: CSS variables + the View Transitions API, no runtime theme engine
 - Cloudflare Workers ready (`wrangler.jsonc`)
 
@@ -55,17 +53,17 @@ Then:
 src/
 ├── lib/                    # Pure data layer, UI-agnostic
 │   ├── csv.ts              #   CSV parsing (quotes / escapes / BOM) and types
-│   ├── analytics.ts        #   Aggregations: trends, distribution, heat,
-│   │                       #   concentration, auto insights
+│   ├── analytics.ts        #   Aggregations: totals, trends, distribution
 │   ├── theme.tsx           #   Theme tokens, provider, View-Transition switching
 │   ├── colors.ts           #   Stable model → palette-slot mapping
 │   ├── format.ts           #   Number / timestamp formatting
 │   └── store.ts            #   Global in-memory store (no persistence)
 ├── components/
 │   ├── charts/             # Hand-rolled visuals: TimelineChart / ModelDonut /
-│   │                       #   CompositionBars / UsageHeatmap / TopRequests / Galaxy (3D)
+│   │                       #   CompositionBars / Galaxy (3D)
 │   ├── KpiRow.tsx          # KPI strip with rolling numbers
-│   ├── InsightsGrid.tsx    # Auto-insight cards
+│   ├── TaglineReveal.tsx   # Word-by-word scroll reveal on the landing page
+│   ├── NotFound.tsx        # Branded 404
 │   ├── ThemeSwitcher.tsx   # Print / Blueprint swatches
 │   ├── UploadZone.tsx      # Drag & drop upload
 │   └── Logo.tsx            # currentColor-driven prism mark

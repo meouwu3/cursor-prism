@@ -4,21 +4,11 @@ import { CompositionBars } from "#/components/charts/CompositionBars";
 import { Galaxy } from "#/components/charts/Galaxy";
 import { ModelDonut } from "#/components/charts/ModelDonut";
 import { TimelineChart } from "#/components/charts/TimelineChart";
-import { TopRequests } from "#/components/charts/TopRequests";
-import { UsageHeatmap } from "#/components/charts/UsageHeatmap";
-import { InsightsGrid } from "#/components/InsightsGrid";
 import { KpiRow } from "#/components/KpiRow";
 import { Logo } from "#/components/Logo";
 import { ThemeSwitcher } from "#/components/ThemeSwitcher";
 import { Card, SectionTitle } from "#/components/ui";
-import {
-	buildInsights,
-	dailySeries,
-	heatMatrix,
-	modelStats,
-	summarize,
-	topRequests,
-} from "#/lib/analytics";
+import { dailySeries, modelStats, summarize } from "#/lib/analytics";
 import { modelColor } from "#/lib/colors";
 import { CsvParseError, type UsageRow } from "#/lib/csv";
 import {
@@ -51,9 +41,6 @@ function Dashboard() {
 			summary: summarize(rows),
 			daily: dailySeries(rows),
 			models: modelStats(rows),
-			heat: heatMatrix(rows),
-			top: topRequests(rows, 8),
-			insights: buildInsights(rows),
 			recent: [...rows]
 				.sort((a, b) => b.date.getTime() - a.date.getTime())
 				.slice(0, 50),
@@ -243,47 +230,10 @@ function Dashboard() {
 					</Card>
 				</section>
 
-				{/* Heat + leaderboard */}
-				<section className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-5">
-					<Card
-						className="rise px-5 py-4 lg:col-span-3"
-						style={{ "--d": "460ms" } as React.CSSProperties}
-					>
-						<SectionTitle
-							eyebrow="activity heat"
-							title="Activity heat"
-							desc="Seven days × twenty-four hours of burn intensity"
-						/>
-						<UsageHeatmap cells={analytics.heat} />
-					</Card>
-					<Card
-						className="rise px-5 py-4 lg:col-span-2"
-						style={{ "--d": "520ms" } as React.CSSProperties}
-					>
-						<SectionTitle
-							eyebrow="heavy hitters"
-							title="Heaviest requests"
-							desc="The 8 largest single calls"
-						/>
-						<TopRequests rows={analytics.top} />
-					</Card>
-				</section>
-
-				{/* Auto insights */}
-				<section className="mt-8">
-					<SectionTitle
-						eyebrow="auto insights"
-						title="Auto insights"
-						desc="Conclusions grown from the data"
-						delay={560}
-					/>
-					<InsightsGrid insights={analytics.insights} />
-				</section>
-
 				{/* Request ledger */}
 				<section
 					className="rise mt-8"
-					style={{ "--d": "620ms" } as React.CSSProperties}
+					style={{ "--d": "460ms" } as React.CSSProperties}
 				>
 					<Card className="overflow-hidden">
 						<div className="flex items-baseline justify-between px-5 pt-4 pb-3">

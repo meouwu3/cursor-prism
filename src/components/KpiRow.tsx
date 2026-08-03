@@ -1,7 +1,7 @@
-/** KPI overview row: six headline metrics with rolling-number entrance. */
+/** KPI overview row: three headline metrics with rolling-number entrance. */
 
 import type { Summary } from "#/lib/analytics";
-import { formatCost, formatInt, formatPct, formatTokens } from "#/lib/format";
+import { formatCost, formatInt, formatTokens } from "#/lib/format";
 import { useCountUp } from "./ui";
 
 function Kpi({
@@ -56,7 +56,7 @@ function AnimatedKpi({
 
 export function KpiRow({ summary }: { summary: Summary }) {
 	return (
-		<div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+		<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
 			<AnimatedKpi
 				label="Total Tokens"
 				raw={summary.totalTokens}
@@ -72,37 +72,12 @@ export function KpiRow({ summary }: { summary: Summary }) {
 				delay={60}
 			/>
 			<AnimatedKpi
-				label="Requests"
-				raw={summary.requestCount}
-				format={formatInt}
-				sub={`${summary.activeDays} active days`}
-				delay={120}
-			/>
-			<AnimatedKpi
 				label="Cache Hit Rate"
 				raw={summary.cacheHitRate * 100}
 				format={(n) => `${n.toFixed(1)}%`}
 				sub={`${formatTokens(summary.cacheRead)} from cache`}
-				delay={180}
-			/>
-			<AnimatedKpi
-				label="Avg per Request"
-				raw={summary.avgTokens}
-				format={formatTokens}
-				sub={`output share ${formatPct(summary.outputRatio)}`}
-				delay={240}
-			/>
-			<Kpi
-				label="Primary Model"
-				value={summary.topModel}
-				sub={formatDayRange(summary.rangeStart, summary.rangeEnd)}
-				delay={300}
+				delay={120}
 			/>
 		</div>
 	);
-}
-
-function formatDayRange(a: Date, b: Date): string {
-	const f = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`;
-	return `${f(a)} — ${f(b)}`;
 }

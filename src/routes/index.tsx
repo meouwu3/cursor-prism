@@ -30,7 +30,7 @@ const STEPS = [
 	{
 		n: "03",
 		title: "Explore",
-		desc: "Six lenses on where your tokens actually go",
+		desc: "Four lenses on where your tokens actually go",
 	},
 ];
 
@@ -48,16 +48,8 @@ const FEATURES = [
 		desc: "Cache reads versus fresh input versus output. Quantify how hard context reuse works for you.",
 	},
 	{
-		title: "Activity heat",
-		desc: "A 7 × 24 heat matrix that exposes your peak coding hours.",
-	},
-	{
 		title: "Token galaxy",
 		desc: "A 3D particle cloud built from scratch. Every request is a star you can grab and inspect.",
-	},
-	{
-		title: "Auto insights",
-		desc: "Cost concentration, peak windows, and cost per million tokens. Conclusions, not just charts.",
 	},
 ];
 
@@ -151,8 +143,8 @@ function Landing() {
 							}
 						>
 							Cursor hands you a spreadsheet. Cursor Prism hands you an
-							observatory — trends, models, cache economics, heat, and a 3D
-							galaxy of every request.
+							observatory — trends, models, cache economics, and a 3D galaxy of
+							every request.
 						</p>
 					</div>
 					<dl
@@ -223,7 +215,7 @@ function Landing() {
 					>
 						<div className="kicker">The index</div>
 						<h2 className="display mt-1 text-2xl font-semibold">
-							Six lenses on your usage
+							Four lenses on your usage
 						</h2>
 					</div>
 					<div className="grid gap-x-16 sm:grid-cols-2">

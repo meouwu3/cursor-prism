@@ -61,8 +61,6 @@ export interface ChartTokens {
 	cross: string;
 	/** Accent used for series line, markers, hover rings */
 	accent: string;
-	/** Heatmap cell color at intensity a ∈ [0,1] */
-	heat: (a: number) => string;
 }
 
 export const CHART_TOKENS: Record<ThemeId, ChartTokens> = {
@@ -85,7 +83,6 @@ export const CHART_TOKENS: Record<ThemeId, ChartTokens> = {
 		avg: "rgba(27,26,22,0.35)",
 		cross: "rgba(27,26,22,0.35)",
 		accent: "#D9481C",
-		heat: (a) => `rgba(217,72,28,${0.05 + a * 0.85})`,
 	},
 	blueprint: {
 		bg: "#113C82",
@@ -106,7 +103,6 @@ export const CHART_TOKENS: Record<ThemeId, ChartTokens> = {
 		avg: "rgba(234,241,255,0.40)",
 		cross: "rgba(255,212,71,0.65)",
 		accent: "#FFFFFF",
-		heat: (a) => `rgba(255,255,255,${0.05 + a * 0.8})`,
 	},
 };
 

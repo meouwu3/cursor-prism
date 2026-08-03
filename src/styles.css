@@ -359,23 +359,6 @@ p {
 	border-top: 1px solid var(--line-strong);
 }
 
-/* Insight cards: accent top-edge on paper, panels elsewhere */
-.insight {
-	position: relative;
-	background: var(--bg-2);
-	border: 1px solid var(--line);
-	border-radius: var(--radius);
-}
-[data-theme="print"] .insight {
-	background: transparent;
-	border: none;
-	border-top: 2px solid var(--accent);
-	border-radius: 0;
-}
-[data-theme="blueprint"] .insight {
-	background: rgba(234, 241, 255, 0.04);
-}
-
 /* KPI cells: ruled strip on paper, panels elsewhere */
 .kpi {
 	background: var(--bg-2);

@@ -50,5 +50,3 @@ export function formatTime(d: Date): string {
 export function formatDateTime(d: Date): string {
 	return `${formatDay(d)} ${formatTime(d)}`;
 }
-
-export const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
