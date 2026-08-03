@@ -264,9 +264,12 @@ function Dashboard() {
 
 function DetailTable({ rows }: { rows: UsageRow[] }) {
 	const tokens = useChartTokens();
+	/** Zero renders as a quiet dash, so an unused cache-write column stays calm */
+	const tok = (n: number) =>
+		n > 0 ? formatTokens(n) : <span style={{ color: "var(--ink-3)" }}>—</span>;
 	return (
 		<div className="overflow-x-auto">
-			<table className="w-full min-w-[760px] text-left text-xs">
+			<table className="w-full min-w-[880px] text-left text-xs">
 				<thead>
 					<tr
 						className="rule-t-strong"
@@ -279,9 +282,12 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 						<th className="px-2 py-2.5 font-normal">Kind</th>
 						<th className="px-2 py-2.5 font-normal">Model</th>
 						<th className="num px-2 py-2.5 text-right font-normal">
-							Cache Read
+							Cache Write
 						</th>
 						<th className="num px-2 py-2.5 text-right font-normal">Input</th>
+						<th className="num px-2 py-2.5 text-right font-normal">
+							Cache Read
+						</th>
 						<th className="num px-2 py-2.5 text-right font-normal">Output</th>
 						<th className="num px-2 py-2.5 text-right font-normal">Total</th>
 						<th className="num px-5 py-2.5 text-right font-normal">Cost</th>
@@ -341,21 +347,27 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 							</td>
 							<td
 								className="num px-2 py-2 text-right"
+								style={{ color: "var(--ink-2)" }}
+							>
+								{tok(r.inputWithCacheWrite)}
+							</td>
+							<td
+								className="num px-2 py-2 text-right"
+								style={{ color: "var(--ink-2)" }}
+							>
+								{tok(r.inputWithoutCacheWrite)}
+							</td>
+							<td
+								className="num px-2 py-2 text-right"
 								style={{ color: "var(--accent)" }}
 							>
-								{formatTokens(r.cacheRead)}
+								{tok(r.cacheRead)}
 							</td>
 							<td
 								className="num px-2 py-2 text-right"
 								style={{ color: "var(--ink-2)" }}
 							>
-								{formatTokens(r.inputWithCacheWrite + r.inputWithoutCacheWrite)}
-							</td>
-							<td
-								className="num px-2 py-2 text-right"
-								style={{ color: "var(--ink-2)" }}
-							>
-								{formatTokens(r.outputTokens)}
+								{tok(r.outputTokens)}
 							</td>
 							<td
 								className="num px-2 py-2 text-right font-medium"
