@@ -14,7 +14,7 @@ One semantic token system, two complete looks. Switch from the top bar — the c
 
 | Print | Blueprint |
 | --- | --- |
-| Editorial paper: Georgia serif, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
+| Editorial paper: Fraunces serif over Geist, ruled hairlines, vermilion accent, flat infographics | Technical drawing: Geist Mono, graph paper, construction dashes, one amber highlight |
 | ![Print](docs/screenshots/print-landing.png) | ![Blueprint](docs/screenshots/blueprint-landing.png) |
 
 ## Two lenses

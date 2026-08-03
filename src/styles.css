@@ -86,8 +86,8 @@
 	--line-strong: #1b1a16;
 	--accent: #d9481c;
 	--accent-ink: #fffef9;
-	--font-display: Georgia, "Times New Roman", serif;
-	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+	--font-display: "Fraunces", Georgia, "Times New Roman", serif;
+	--font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
 	--ease: cubic-bezier(0.32, 0.72, 0, 1);
 	--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 	--hero-grad: linear-gradient(90deg, #1b1a16, #6b675c);
