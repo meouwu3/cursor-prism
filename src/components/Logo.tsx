@@ -1,13 +1,30 @@
 /**
  * Cursor Prism mark: a beam refracted into a spectrum.
- * On mount it draws itself like a signature — beam first, then the
- * prism, then the refracted rays fan out. Pure stroke-dashoffset,
- * colored from currentColor + the theme accent so it sits correctly
- * on paper, on near-black, and on blueprint blue.
+ * It draws itself like a signature — beam first, then the prism, then
+ * the refracted rays fan out. Pure stroke-dashoffset, colored from
+ * currentColor + the theme accent so it sits correctly on paper, on
+ * near-black, and on blueprint blue.
+ *
+ * The whole sequence runs ~1.75s; remounting the svg every LOOP_MS
+ * replays it with the choreography intact. Reduced motion keeps the
+ * mark static (motion-reduce pins every stroke to its drawn state).
  */
+
+import { useEffect, useState } from "react";
+
+/** Draw (1.75s) + hold (~2.25s) before the next pass. */
+const LOOP_MS = 4000;
+
 export function Logo({ size = 34 }: { size?: number }) {
+	const [cycle, setCycle] = useState(0);
+	useEffect(() => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		const id = setInterval(() => setCycle((c) => c + 1), LOOP_MS);
+		return () => clearInterval(id);
+	}, []);
 	return (
 		<svg
+			key={cycle}
 			width={size}
 			height={size}
 			viewBox="0 0 48 48"
