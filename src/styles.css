@@ -24,6 +24,7 @@
 	--font-display: Georgia, "Times New Roman", serif;
 	--font-body: "Inter", -apple-system, "Helvetica Neue", sans-serif;
 	--ease: cubic-bezier(0.32, 0.72, 0, 1);
+	--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 	--hero-grad: linear-gradient(90deg, #1b1a16, #6b675c);
 }
 
@@ -42,6 +43,7 @@
 	--font-display: "Geist Mono", ui-monospace, monospace;
 	--font-body: "Geist Mono", ui-monospace, monospace;
 	--ease: cubic-bezier(0.32, 0.72, 0, 1);
+	--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 	--hero-grad: linear-gradient(90deg, #ffffff, #9b9b9b);
 }
 
@@ -330,11 +332,12 @@ p {
 		background-color 0.25s var(--ease),
 		border-color 0.25s var(--ease),
 		color 0.25s var(--ease),
-		transform 0.15s var(--ease);
+		transform 0.2s var(--spring);
 }
 .btn:hover {
 	color: var(--ink);
 	border-color: var(--line-strong);
+	transform: translateY(-1px);
 }
 .btn:active {
 	transform: scale(0.98);
@@ -405,11 +408,12 @@ p {
 	transition:
 		border-color 0.25s var(--ease),
 		color 0.25s var(--ease),
-		transform 0.15s var(--ease);
+		transform 0.2s var(--spring);
 }
 .btn-quiet:hover {
 	color: var(--ink);
 	border-color: var(--line-strong);
+	transform: translateY(-1px);
 }
 .btn-quiet:active {
 	transform: scale(0.98);
@@ -419,6 +423,41 @@ p {
 }
 [data-theme="blueprint"] .theme-switch {
 	border-style: dashed;
+}
+
+/* Spring physics on small interactive elements */
+.theme-switch button {
+	transition: transform 0.25s var(--spring);
+}
+.theme-switch button:hover {
+	transform: scale(1.06);
+}
+
+/* Skeleton blocks shaped like the layout they replace */
+@keyframes skel-pulse {
+	50% {
+		opacity: 0.45;
+	}
+}
+.skel {
+	background: var(--line);
+	border-radius: var(--radius);
+	animation: skel-pulse 1.4s var(--ease) infinite;
+}
+
+/* Sticky glass masthead: the header stays reachable on long pages.
+   Print gets the strong bottom rule — the classic paper masthead. */
+.masthead {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	background: color-mix(in srgb, var(--bg) 80%, transparent);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid var(--line);
+}
+[data-theme="print"] .masthead {
+	border-bottom-color: var(--line-strong);
 }
 
 /* Hairline rules */

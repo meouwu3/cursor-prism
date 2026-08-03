@@ -62,9 +62,19 @@ function Dashboard() {
 	};
 
 	if (data.status !== "ready" || !rows || !analytics) {
+		// Skeleton shaped like the real layout while data lands
 		return (
-			<div className="relative flex min-h-dvh items-center justify-center">
-				<div className="kicker animate-pulse">loading spectrum…</div>
+			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
+				<div className="mb-8 flex items-center justify-between pt-1">
+					<div className="skel h-6 w-36" />
+					<div className="skel h-8 w-56" />
+				</div>
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+					<div className="skel h-20" />
+					<div className="skel h-20" />
+					<div className="skel h-20" />
+				</div>
+				<div className="skel mt-6 h-72" />
 			</div>
 		);
 	}
@@ -73,9 +83,9 @@ function Dashboard() {
 
 	return (
 		<div className="relative min-h-dvh">
-			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
-				{/* Top bar */}
-				<header className="fade-in rule-t-strong mb-8 flex flex-wrap items-center justify-between gap-3 pt-4">
+			{/* Sticky glass masthead */}
+			<header className="masthead fade-in">
+				<div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
 					<Link
 						to="/"
 						className="flex items-center gap-2.5 transition-opacity hover:opacity-70"
@@ -110,8 +120,10 @@ function Dashboard() {
 							}}
 						/>
 					</div>
-				</header>
+				</div>
+			</header>
 
+			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
 				{error ? (
 					<div
 						className="mb-4 border px-4 py-2.5 text-sm"
