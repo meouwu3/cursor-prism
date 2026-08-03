@@ -56,10 +56,6 @@ const FAQ = [
 		a: "No. The file is parsed in your browser with FileReader and held in memory. Nothing is transmitted, and nothing survives a page reload.",
 	},
 	{
-		q: "Why is cache read such a large share?",
-		a: "Cursor reuses conversation context instead of resending it. Cache reads are billed far below fresh input, so a high cache share usually means lower spend.",
-	},
-	{
 		q: "Which browsers are supported?",
 		a: "Any current browser. The circular theme transition needs a recent Chromium based browser; everywhere else the theme simply switches.",
 	},
@@ -143,7 +139,7 @@ function Landing() {
 							style={{ "--d": "160ms" } as React.CSSProperties}
 						>
 							Cursor hands you a spreadsheet. Cursor Prism hands you an
-							observatory — trends, models, and cache economics.
+							observatory — trends, models, and every request.
 						</p>
 					</div>
 					<dl
