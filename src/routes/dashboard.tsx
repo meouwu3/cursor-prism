@@ -66,15 +66,15 @@ function Dashboard() {
 		return (
 			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
 				<div className="mb-8 flex items-center justify-between pt-1">
-					<div className="skel h-6 w-36" />
-					<div className="skel h-8 w-56" />
+					<div className="h-6 w-36 animate-skel rounded-xs bg-line" />
+					<div className="h-8 w-56 animate-skel rounded-xs bg-line" />
 				</div>
 				<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-					<div className="skel h-20" />
-					<div className="skel h-20" />
-					<div className="skel h-20" />
+					<div className="h-20 animate-skel rounded-xs bg-line" />
+					<div className="h-20 animate-skel rounded-xs bg-line" />
+					<div className="h-20 animate-skel rounded-xs bg-line" />
 				</div>
-				<div className="skel mt-6 h-72" />
+				<div className="mt-6 h-72 animate-skel rounded-xs bg-line" />
 			</div>
 		);
 	}
@@ -84,26 +84,26 @@ function Dashboard() {
 	return (
 		<div className="relative min-h-dvh">
 			{/* Sticky glass masthead */}
-			<header className="masthead fade-in">
+			<header className="sticky top-0 z-40 animate-fade-in border-b border-line bg-[color-mix(in_srgb,var(--bg)_80%,transparent)] backdrop-blur-md motion-reduce:animate-none print:border-b-line-strong">
 				<div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
 					<Link
 						to="/"
 						className="flex items-center gap-2.5 transition-opacity hover:opacity-70"
 					>
 						<Logo size={26} />
-						<span className="display text-base font-semibold tracking-tight">
+						<span className="font-display text-balance text-base font-semibold tracking-tight text-ink">
 							Cursor Prism
 						</span>
 					</Link>
 
 					<div className="flex flex-wrap items-center gap-2">
-						<span className="chip">
+						<span className="inline-flex h-8 items-center gap-[0.5em] rounded-xs border border-line px-[0.9em] font-mono text-xs text-ink-2 blueprint:border-dashed">
 							{formatDay(summary.rangeStart)} ~ {formatDay(summary.rangeEnd)}
 						</span>
 						<button
 							type="button"
 							onClick={() => fileInput.current?.click()}
-							className="btn-quiet"
+							className="inline-flex h-8 cursor-pointer items-center rounded-xs border border-line bg-transparent px-3 font-body text-xs font-medium text-ink-2 [transition:border-color_.25s_var(--ease),color_.25s_var(--ease),translate_.2s_var(--spring),scale_.2s_var(--spring)] hover:-translate-y-px hover:border-line-strong hover:text-ink active:scale-[0.98] blueprint:border-dashed"
 						>
 							Change CSV
 						</button>
@@ -125,14 +125,7 @@ function Dashboard() {
 
 			<div className="relative mx-auto max-w-6xl px-4 pt-6 pb-16 sm:px-6">
 				{error ? (
-					<div
-						className="mb-4 border px-4 py-2.5 text-sm"
-						style={{
-							borderRadius: "var(--radius)",
-							borderColor: "var(--accent)",
-							color: "var(--accent)",
-						}}
-					>
+					<div className="mb-4 rounded-xs border border-accent px-4 py-2.5 text-sm text-accent">
 						Parse failed: {error}
 					</div>
 				) : null}
@@ -142,35 +135,28 @@ function Dashboard() {
 
 				{/* Trend */}
 				<section
-					className="rise mt-6"
+					className="mt-6 animate-rise [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 					style={{ "--d": "200ms" } as React.CSSProperties}
 				>
 					<Card className="px-5 pt-4 pb-3">
 						<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
 							<div>
-								<div className="kicker">timeline</div>
-								<h2 className="display mt-0.5 text-base font-semibold">
+								<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+									timeline
+								</div>
+								<h2 className="mt-0.5 font-display text-balance text-base font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
 									Daily rhythm
 								</h2>
 							</div>
-							<div
-								className="flex border p-0.5"
-								style={{
-									borderColor: "var(--line)",
-									borderRadius: "var(--radius)",
-								}}
-							>
+							<div className="flex rounded-xs border border-line p-0.5">
 								{(["tokens", "cost"] as const).map((m) => (
 									<button
 										key={m}
 										type="button"
 										onClick={() => setMode(m)}
-										className="num cursor-pointer border-none px-3.5 py-1 text-xs transition-colors"
-										style={{
-											borderRadius: "calc(var(--radius) - 1px)",
-											background: mode === m ? "var(--ink)" : "transparent",
-											color: mode === m ? "var(--bg)" : "var(--ink-3)",
-										}}
+										className={`cursor-pointer rounded-[1px] border-none px-3.5 py-1 font-mono text-xs tabular-nums tracking-[-0.01em] transition-colors ${
+											mode === m ? "bg-ink text-bg" : "text-ink-3"
+										}`}
 									>
 										{m === "tokens" ? "Tokens" : "Cost"}
 									</button>
@@ -184,7 +170,7 @@ function Dashboard() {
 				{/* Model spectrum: share fused with composition */}
 				<section className="mt-6">
 					<Card
-						className="rise px-5 py-4"
+						className="animate-rise px-5 py-4 [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 						style={{ "--d": "280ms" } as React.CSSProperties}
 					>
 						<SectionTitle
@@ -205,18 +191,20 @@ function Dashboard() {
 
 				{/* Request ledger */}
 				<section
-					className="rise mt-8"
+					className="mt-8 animate-rise [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 					style={{ "--d": "340ms" } as React.CSSProperties}
 				>
 					<Card className="overflow-hidden">
 						<div className="flex items-baseline justify-between px-5 pt-4 pb-3">
 							<div>
-								<div className="kicker">ledger</div>
-								<h2 className="display mt-0.5 text-base font-semibold">
+								<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+									ledger
+								</div>
+								<h2 className="mt-0.5 font-display text-balance text-base font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
 									Request ledger
 								</h2>
 							</div>
-							<span className="num text-xs" style={{ color: "var(--ink-3)" }}>
+							<span className="font-mono text-xs tabular-nums tracking-[-0.01em] text-ink-3">
 								latest {analytics.recent.length} rows
 							</span>
 						</div>
@@ -224,10 +212,7 @@ function Dashboard() {
 					</Card>
 				</section>
 
-				<footer
-					className="rule-t mt-14 pt-5 text-center text-xs"
-					style={{ color: "var(--ink-3)" }}
-				>
+				<footer className="mt-14 border-t border-line pt-5 text-center text-xs text-ink-3">
 					Cursor Prism — data lives only in browser memory.
 				</footer>
 			</div>
@@ -239,119 +224,83 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 	const tokens = useChartTokens();
 	/** Zero renders as a quiet dash, so an unused cache-write column stays calm */
 	const tok = (n: number) =>
-		n > 0 ? formatTokens(n) : <span style={{ color: "var(--ink-3)" }}>—</span>;
+		n > 0 ? formatTokens(n) : <span className="text-ink-3">—</span>;
 	return (
 		<div className="overflow-x-auto">
 			<table className="w-full min-w-[880px] text-left text-xs">
 				<thead>
-					<tr
-						className="rule-t-strong"
-						style={{
-							borderBottom: "1px solid var(--line)",
-							color: "var(--ink-3)",
-						}}
-					>
-						<th className="num px-5 py-2.5 font-normal">Time</th>
+					<tr className="border-t border-t-line-strong border-b border-b-line text-ink-3">
+						<th className="px-5 py-2.5 font-mono font-normal tabular-nums tracking-[-0.01em]">
+							Time
+						</th>
 						<th className="px-2 py-2.5 font-normal">Kind</th>
 						<th className="px-2 py-2.5 font-normal">Model</th>
-						<th className="num px-2 py-2.5 text-right font-normal">
+						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
 							Cache Write
 						</th>
-						<th className="num px-2 py-2.5 text-right font-normal">Input</th>
-						<th className="num px-2 py-2.5 text-right font-normal">
+						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
+							Input
+						</th>
+						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
 							Cache Read
 						</th>
-						<th className="num px-2 py-2.5 text-right font-normal">Output</th>
-						<th className="num px-2 py-2.5 text-right font-normal">Total</th>
-						<th className="num px-5 py-2.5 text-right font-normal">Cost</th>
+						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
+							Output
+						</th>
+						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
+							Total
+						</th>
+						<th className="px-5 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
+							Cost
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{rows.map((r) => (
 						<tr
 							key={r.date.getTime() + r.model}
-							className="transition-colors"
-							style={{ borderBottom: "1px solid var(--line)" }}
+							className="border-b border-line transition-colors"
 						>
-							<td
-								className="num px-5 py-2 whitespace-nowrap"
-								style={{ color: "var(--ink-2)" }}
-							>
+							<td className="px-5 py-2 font-mono whitespace-nowrap tabular-nums tracking-[-0.01em] text-ink-2">
 								{formatDateTime(r.date)}
 							</td>
 							<td className="px-2 py-2">
-								<span
-									className="border px-1.5 py-0.5 text-xs"
-									style={{
-										borderRadius: "calc(var(--radius) - 1px)",
-										borderColor: "var(--line)",
-										color: "var(--ink-2)",
-									}}
-								>
+								<span className="rounded-[1px] border border-line px-1.5 py-0.5 text-xs text-ink-2">
 									{r.kind}
 								</span>
 								{r.maxMode ? (
-									<span
-										className="ml-1 border px-1.5 py-0.5 text-xs"
-										style={{
-											borderRadius: "calc(var(--radius) - 1px)",
-											borderColor: "var(--accent)",
-											color: "var(--accent)",
-										}}
-									>
+									<span className="ml-1 rounded-[1px] border border-accent px-1.5 py-0.5 text-xs text-accent">
 										MAX
 									</span>
 								) : null}
 							</td>
 							<td className="px-2 py-2">
-								<span
-									className="flex items-center gap-1.5"
-									style={{ color: "var(--ink)" }}
-								>
+								<span className="flex items-center gap-1.5 text-ink">
 									<span
-										className="h-1.5 w-1.5 shrink-0"
+										className="h-1.5 w-1.5 shrink-0 rounded-[1px]"
 										style={{
 											background: modelColor(r.model, tokens.palette),
-											borderRadius: "calc(var(--radius) - 1px)",
 										}}
 									/>
 									<span className="max-w-[180px] truncate">{r.model}</span>
 								</span>
 							</td>
-							<td
-								className="num px-2 py-2 text-right"
-								style={{ color: "var(--ink-2)" }}
-							>
+							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
 								{tok(r.inputWithCacheWrite)}
 							</td>
-							<td
-								className="num px-2 py-2 text-right"
-								style={{ color: "var(--ink-2)" }}
-							>
+							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
 								{tok(r.inputWithoutCacheWrite)}
 							</td>
-							<td
-								className="num px-2 py-2 text-right"
-								style={{ color: "var(--accent)" }}
-							>
+							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-accent">
 								{tok(r.cacheRead)}
 							</td>
-							<td
-								className="num px-2 py-2 text-right"
-								style={{ color: "var(--ink-2)" }}
-							>
+							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
 								{tok(r.outputTokens)}
 							</td>
-							<td
-								className="num px-2 py-2 text-right font-medium"
-								style={{ color: "var(--ink)" }}
-							>
+							<td className="px-2 py-2 text-right font-mono font-medium tabular-nums tracking-[-0.01em] text-ink">
 								{formatTokens(r.totalTokens)}
 							</td>
-							<td
-								className="num px-5 py-2 text-right"
-								style={{ color: "var(--ink)" }}
-							>
+							<td className="px-5 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink">
 								{formatCost(r.cost)}
 							</td>
 						</tr>

@@ -99,16 +99,18 @@ function Landing() {
 	return (
 		<div className="relative min-h-dvh">
 			{/* Sticky glass masthead */}
-			<header className="masthead fade-in">
+			<header className="sticky top-0 z-40 animate-fade-in border-b border-line bg-[color-mix(in_srgb,var(--bg)_80%,transparent)] backdrop-blur-md motion-reduce:animate-none print:border-b-line-strong">
 				<div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
 					<div className="flex items-center gap-2.5">
 						<Logo size={30} />
-						<span className="display text-lg font-semibold tracking-tight">
+						<span className="font-display text-balance text-lg font-semibold tracking-tight text-ink">
 							Cursor Prism
 						</span>
 					</div>
 					<div className="flex items-center gap-4">
-						<span className="kicker hidden sm:block">open source (MIT)</span>
+						<span className="hidden font-mono text-xs tracking-[0.06em] text-ink-3 sm:block">
+							open source (MIT)
+						</span>
 						<ThemeSwitcher />
 					</div>
 				</div>
@@ -118,40 +120,45 @@ function Landing() {
 				{/* Hero — left aligned, meta column on the right */}
 				<section className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-12">
 					<div className="lg:col-span-7">
-						<div className="rise kicker">Cursor usage observatory</div>
+						<div className="animate-rise font-mono text-xs tracking-[0.06em] text-ink-3 [animation-delay:var(--d,0ms)] motion-reduce:animate-none">
+							Cursor usage observatory
+						</div>
 						<h1
-							className="display rise mt-4 max-w-[680px] text-4xl font-semibold sm:text-6xl"
+							className="mt-4 max-w-[680px] animate-rise font-display text-balance text-4xl font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em] sm:text-6xl [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 							style={{ "--d": "80ms" } as React.CSSProperties}
 						>
-							<span className="hero-grad">Refract every</span>{" "}
-							<span className="accent-word">token</span>
+							<span className="bg-clip-text text-transparent [background-image:var(--hero-grad)]">
+								Refract every
+							</span>{" "}
+							<span className="text-accent blueprint:underline blueprint:decoration-dashed blueprint:decoration-1 blueprint:underline-offset-[0.18em]">
+								token
+							</span>
 							<br />
-							<span className="hero-grad">into its spectrum</span>
+							<span className="bg-clip-text text-transparent [background-image:var(--hero-grad)]">
+								into its spectrum
+							</span>
 						</h1>
 						<p
-							className="rise mt-5 max-w-[680px] text-base leading-relaxed"
-							style={
-								{
-									"--d": "160ms",
-									color: "var(--ink-2)",
-								} as React.CSSProperties
-							}
+							className="mt-5 max-w-[680px] animate-rise text-base leading-relaxed text-ink-2 [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
+							style={{ "--d": "160ms" } as React.CSSProperties}
 						>
 							Cursor hands you a spreadsheet. Cursor Prism hands you an
 							observatory — trends, models, and cache economics.
 						</p>
 					</div>
 					<dl
-						className="rise lg:col-span-5 lg:pt-9"
+						className="animate-rise lg:col-span-5 lg:pt-9 [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 						style={{ "--d": "240ms" } as React.CSSProperties}
 					>
 						{META.map(([k, v]) => (
 							<div
 								key={k}
-								className="rule-t flex items-baseline justify-between gap-4 py-2.5"
+								className="flex items-baseline justify-between gap-4 border-t border-line py-2.5"
 							>
-								<dt className="kicker">{k}</dt>
-								<dd className="num text-xs" style={{ color: "var(--ink)" }}>
+								<dt className="font-mono text-xs tracking-[0.06em] text-ink-3">
+									{k}
+								</dt>
+								<dd className="font-mono text-xs tabular-nums tracking-[-0.01em] text-ink">
 									{v}
 								</dd>
 							</div>
@@ -161,15 +168,13 @@ function Landing() {
 
 				{/* Upload — the one primary action */}
 				<section
-					className="rise mt-12 max-w-2xl"
+					className="mt-12 max-w-2xl animate-rise [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
 					style={{ "--d": "320ms" } as React.CSSProperties}
 				>
 					<UploadZone onFile={onFile} error={error} />
 					<p
-						className="fade-in mt-3 text-xs"
-						style={
-							{ "--d": "400ms", color: "var(--ink-3)" } as React.CSSProperties
-						}
+						className="mt-3 animate-fade-in text-xs text-ink-3 [animation-delay:var(--d,0ms)] motion-reduce:animate-none"
+						style={{ "--d": "400ms" } as React.CSSProperties}
 					>
 						Parsed entirely in your browser. Nothing is uploaded, stored, or
 						shared.
@@ -179,21 +184,23 @@ function Landing() {
 				{/* How it works — full width ruled rows */}
 				<section className="mt-20 max-w-3xl">
 					<Reveal className="mb-5">
-						<div className="kicker">How it works</div>
+						<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+							How it works
+						</div>
 					</Reveal>
 					{STEPS.map((s, i) => (
 						<Reveal
 							key={s.n}
-							className="rule-t grid grid-cols-[3rem_8rem_1fr] items-baseline gap-4 py-4"
+							className="grid grid-cols-[3rem_8rem_1fr] items-baseline gap-4 border-t border-line py-4"
 							delay={i * 90}
 						>
-							<span className="num text-xs" style={{ color: "var(--accent)" }}>
+							<span className="font-mono text-xs tabular-nums tracking-[-0.01em] text-accent">
 								{s.n}
 							</span>
-							<span className="display text-base font-semibold">{s.title}</span>
-							<span className="text-sm" style={{ color: "var(--ink-2)" }}>
-								{s.desc}
+							<span className="font-display text-balance text-base font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
+								{s.title}
 							</span>
+							<span className="text-sm text-ink-2">{s.desc}</span>
 						</Reveal>
 					))}
 				</section>
@@ -201,8 +208,10 @@ function Landing() {
 				{/* Benefits — asymmetric two column index */}
 				<section className="mt-20">
 					<Reveal className="mb-6">
-						<div className="kicker">The index</div>
-						<h2 className="display mt-1 text-2xl font-semibold">
+						<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+							The index
+						</div>
+						<h2 className="mt-1 font-display text-balance text-2xl font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
 							Two lenses on your usage
 						</h2>
 					</Reveal>
@@ -223,7 +232,7 @@ function Landing() {
 				{/* Tagline reveal — words light up one by one on scroll */}
 				<section className="mt-24 sm:mt-32">
 					<TaglineReveal
-						className="display max-w-[680px] text-4xl font-semibold leading-snug sm:text-5xl"
+						className="max-w-[680px] font-display text-balance text-4xl font-semibold leading-snug tracking-[-0.015em] blueprint:tracking-[-0.04em] sm:text-5xl"
 						text="Every request leaves a trace — when you burn, what you burn on, and what the cache saves you."
 					/>
 				</section>
@@ -231,19 +240,24 @@ function Landing() {
 				{/* FAQ — side by side, no accordion */}
 				<section className="mt-24">
 					<Reveal className="mb-6">
-						<div className="kicker">Questions</div>
-						<h2 className="display mt-1 text-2xl font-semibold">
+						<div className="font-mono text-xs tracking-[0.06em] text-ink-3">
+							Questions
+						</div>
+						<h2 className="mt-1 font-display text-balance text-2xl font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
 							Asked and answered
 						</h2>
 					</Reveal>
 					<div className="grid gap-x-16 sm:grid-cols-2">
 						{FAQ.map((f, i) => (
-							<Reveal key={f.q} className="rule-t py-4" delay={i * 70}>
-								<div className="display text-base font-semibold">{f.q}</div>
-								<p
-									className="mt-1.5 text-sm leading-relaxed"
-									style={{ color: "var(--ink-2)" }}
-								>
+							<Reveal
+								key={f.q}
+								className="border-t border-line py-4"
+								delay={i * 70}
+							>
+								<div className="font-display text-balance text-base font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
+									{f.q}
+								</div>
+								<p className="mt-1.5 text-sm leading-relaxed text-ink-2">
 									{f.a}
 								</p>
 							</Reveal>
@@ -255,17 +269,14 @@ function Landing() {
 				<section className="mt-24 max-w-2xl">
 					<OutlineFillHeading
 						text="Ready when your CSV is."
-						className="display mb-5 text-2xl font-semibold"
+						className="mb-5 font-display text-balance text-2xl font-semibold tracking-[-0.015em] blueprint:tracking-[-0.04em]"
 					/>
 					<Reveal delay={120}>
 						<UploadZone onFile={onFile} error={error} compact />
 					</Reveal>
 				</section>
 
-				<Reveal
-					className="rule-t mt-20 pt-5 text-xs"
-					style={{ color: "var(--ink-3)" }}
-				>
+				<Reveal className="mt-20 border-t border-line pt-5 text-xs text-ink-3">
 					<p>Cursor Prism — your data never leaves the browser.</p>
 				</Reveal>
 			</div>
@@ -301,14 +312,11 @@ function OutlineFillHeading({
 
 function Feature({ f, d }: { f: { title: string; desc: string }; d: number }) {
 	return (
-		<Reveal className="rule-t py-4" delay={d}>
-			<div className="display text-base font-semibold">{f.title}</div>
-			<p
-				className="mt-1 text-sm leading-relaxed"
-				style={{ color: "var(--ink-2)" }}
-			>
-				{f.desc}
-			</p>
+		<Reveal className="border-t border-line py-4" delay={d}>
+			<div className="font-display text-balance text-base font-semibold tracking-[-0.015em] text-ink blueprint:tracking-[-0.04em]">
+				{f.title}
+			</div>
+			<p className="mt-1 text-sm leading-relaxed text-ink-2">{f.desc}</p>
 		</Reveal>
 	);
 }
