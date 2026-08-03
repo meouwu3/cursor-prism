@@ -103,8 +103,7 @@ function Dashboard() {
 
 					<div className="flex flex-wrap items-center gap-2">
 						<span className="chip">
-							{data.fileName} — {formatDay(summary.rangeStart)} ~{" "}
-							{formatDay(summary.rangeEnd)}
+							{formatDay(summary.rangeStart)} ~ {formatDay(summary.rangeEnd)}
 						</span>
 						<button
 							type="button"
