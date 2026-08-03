@@ -122,7 +122,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-	theme: "print",
+	theme: "blueprint",
 	switchTheme: () => {},
 });
 
@@ -140,9 +140,9 @@ function isThemeId(v: unknown): v is ThemeId {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
 	const [theme, setTheme] = useState<ThemeId>(() => {
-		if (typeof document === "undefined") return "print";
+		if (typeof document === "undefined") return "blueprint";
 		const attr = document.documentElement.dataset.theme;
-		return isThemeId(attr) ? attr : "print";
+		return isThemeId(attr) ? attr : "blueprint";
 	});
 
 	useEffect(() => {

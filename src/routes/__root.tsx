@@ -74,8 +74,8 @@ export const Route = createRootRoute({
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		// data-theme is set pre-paint by the bootstrap script and may differ
-		// from the SSR default ("print") — that divergence is intentional.
-		<html lang="en" data-theme="print" suppressHydrationWarning>
+		// from the SSR default ("blueprint") — that divergence is intentional.
+		<html lang="en" data-theme="blueprint" suppressHydrationWarning>
 			<head>
 				{/* Restore the saved theme before first paint */}
 				<script
