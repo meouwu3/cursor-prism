@@ -42,6 +42,7 @@ function Dashboard() {
 			recent: [...rows]
 				.sort((a, b) => b.date.getTime() - a.date.getTime())
 				.slice(0, 50),
+			hasCacheWrite: rows.some((r) => r.inputWithCacheWrite > 0),
 		};
 	}, [rows]);
 
@@ -208,7 +209,10 @@ function Dashboard() {
 								latest {analytics.recent.length} rows
 							</span>
 						</div>
-						<DetailTable rows={analytics.recent} />
+						<DetailTable
+							rows={analytics.recent}
+							showCacheWrite={analytics.hasCacheWrite}
+						/>
 					</Card>
 				</section>
 
@@ -220,24 +224,32 @@ function Dashboard() {
 	);
 }
 
-function DetailTable({ rows }: { rows: UsageRow[] }) {
+function DetailTable({
+	rows,
+	showCacheWrite,
+}: {
+	rows: UsageRow[];
+	/** The whole dataset decides: no cache writes anywhere, no column */
+	showCacheWrite: boolean;
+}) {
 	const tokens = useChartTokens();
-	/** Zero renders as a quiet dash, so an unused cache-write column stays calm */
+	/** Zero renders as a quiet dash */
 	const tok = (n: number) =>
 		n > 0 ? formatTokens(n) : <span className="text-ink-3">—</span>;
 	return (
 		<div className="overflow-x-auto">
-			<table className="w-full min-w-[880px] text-left text-xs">
+			<table className="w-full min-w-[720px] text-left text-xs">
 				<thead>
 					<tr className="border-t border-t-line-strong border-b border-b-line text-ink-3">
 						<th className="px-5 py-2.5 font-mono font-normal tabular-nums tracking-[-0.01em]">
 							Time
 						</th>
-						<th className="px-2 py-2.5 font-normal">Kind</th>
 						<th className="px-2 py-2.5 font-normal">Model</th>
-						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
-							Cache Write
-						</th>
+						{showCacheWrite ? (
+							<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
+								Cache Write
+							</th>
+						) : null}
 						<th className="px-2 py-2.5 text-right font-mono font-normal tabular-nums tracking-[-0.01em]">
 							Input
 						</th>
@@ -265,16 +277,6 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 								{formatDateTime(r.date)}
 							</td>
 							<td className="px-2 py-2">
-								<span className="rounded-[1px] border border-line px-1.5 py-0.5 text-xs text-ink-2">
-									{r.kind}
-								</span>
-								{r.maxMode ? (
-									<span className="ml-1 rounded-[1px] border border-accent px-1.5 py-0.5 text-xs text-accent">
-										MAX
-									</span>
-								) : null}
-							</td>
-							<td className="px-2 py-2">
 								<span className="flex items-center gap-1.5 text-ink">
 									<span
 										className="h-1.5 w-1.5 shrink-0 rounded-[1px]"
@@ -283,11 +285,18 @@ function DetailTable({ rows }: { rows: UsageRow[] }) {
 										}}
 									/>
 									<span className="max-w-[180px] truncate">{r.model}</span>
+									{r.maxMode ? (
+										<span className="rounded-[1px] border border-accent px-1.5 py-0.5 text-xs text-accent">
+											MAX
+										</span>
+									) : null}
 								</span>
 							</td>
-							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
-								{tok(r.inputWithCacheWrite)}
-							</td>
+							{showCacheWrite ? (
+								<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
+									{tok(r.inputWithCacheWrite)}
+								</td>
+							) : null}
 							<td className="px-2 py-2 text-right font-mono tabular-nums tracking-[-0.01em] text-ink-2">
 								{tok(r.inputWithoutCacheWrite)}
 							</td>
